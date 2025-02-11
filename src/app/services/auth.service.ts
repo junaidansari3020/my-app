@@ -7,16 +7,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private _loginUrl = 'https://car-service.in/luxuryfix/boauth';
+  private loginUrl: string = 'https://car-service.in/luxuryfix/boauth';
 
-  constructor(private _router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   public loginUser(data: any, headers?: HttpHeaders): Observable<HttpResponse<any>> {
     const options = {
-      observe: 'response' as const,
-      headers: headers || new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' })
+      headers: headers || new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' }),
+      withCredentials: true,
+      observe: 'response' as const // ✅ Ensure observe is inside the options
     };
-    return this.http.post<any>(this._loginUrl, data, options);
+
+    return this.http.post<any>(this.loginUrl, data, options);
   }
-  
 }

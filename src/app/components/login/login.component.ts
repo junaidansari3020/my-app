@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  standalone: true, // If using Angular standalone components
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css'], // ✅ Fixed: changed styleUrl to styleUrls
 })
 export class LoginComponent {
   public email: string = '';
   public password: string = '';
 
-  constructor(private _router: Router, private _auth: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {} // ✅ Fixed: Use constructor injection
 
   login() {
     const loginUserObj = {
@@ -24,24 +25,30 @@ export class LoginComponent {
       sPassword: this.password
     };
 
-    this._auth.loginUser(loginUserObj).subscribe({
+    this.authService.loginUser(loginUserObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Login successfully:', response);
-        // this.message = response.body.StatusMessage;
-        // const Rfid = response.headers.get('rfid');
-        // const Rft = response.headers.get('rft');
-        // if (Rfid && Rft) {
-        //   localStorage.setItem('rfid', Rfid);
-        //   localStorage.setItem('rft', Rft);
-        //   this.setHeadersAndLogin();
-        // } else {
-        //   console.error('RFID or RFT header missing in the response');
-        // }
+        console.log('Login successful:', response);
+        // Handle login success, e.g., store token or navigate
       },
       error: (error) => {
         console.error('Login failed:', error);
       }
     });
+    this.getAccessToken();
   }
 
+  getAccessToken() {
+    const accessToken = {
+      iRequestID: 1023
+    };
+
+    this.authService.loginUser(accessToken).subscribe({
+      next: (response: HttpResponse<any>) => {
+        console.log('Access Token:', response);
+      },
+      error: (error) => {
+        console.error('Access Token failed:', error);
+      }
+    });
+  }
 }
