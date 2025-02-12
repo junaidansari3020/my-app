@@ -10,13 +10,13 @@ import { CommonModule } from '@angular/common';
   standalone: true, // If using Angular standalone components
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'], // ✅ Fixed: changed styleUrl to styleUrls
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   public email: string = '';
   public password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {} // ✅ Fixed: Use constructor injection
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     const loginUserObj = {
@@ -28,13 +28,12 @@ export class LoginComponent {
     this.authService.loginUser(loginUserObj).subscribe({
       next: (response: HttpResponse<any>) => {
         console.log('Login successful:', response);
-        // Handle login success, e.g., store token or navigate
+        this.getAccessToken();
       },
       error: (error) => {
         console.error('Login failed:', error);
       }
     });
-    this.getAccessToken();
   }
 
   getAccessToken() {

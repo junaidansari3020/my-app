@@ -15,7 +15,7 @@ export class AuthService {
     const options = {
       headers: headers || new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' }),
       withCredentials: true,
-      observe: 'response' as const // ✅ Ensure observe is inside the options
+      observe: 'response' as const 
     };
 
     return this.http.post<any>(this.loginUrl, data, options);
