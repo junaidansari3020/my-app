@@ -27,7 +27,7 @@ export class LoginComponent {
 
     this.authService.loginUser(loginUserObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Login successful:', response);
+        console.log('Login successful:', response.body);
         this.getAccessToken();
       },
       error: (error) => {
@@ -43,7 +43,9 @@ export class LoginComponent {
 
     this.authService.loginUser(accessToken).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Access Token:', response);
+        console.log('Access Token:', response.body);
+        // localStorage.setItem('employeeApp', JSON.stringify(response.data));
+        this.router.navigateByUrl('dashboard');
       },
       error: (error) => {
         console.error('Access Token failed:', error);
