@@ -1,22 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true, // If using Angular standalone components
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public email: string = '';
   public password: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.getAccessToken();
+  }
 
   login() {
     const loginUserObj = {
@@ -44,7 +47,6 @@ export class LoginComponent {
     this.authService.loginUser(accessToken).subscribe({
       next: (response: HttpResponse<any>) => {
         console.log('Access Token:', response.body);
-        // localStorage.setItem('employeeApp', JSON.stringify(response.data));
         this.router.navigateByUrl('dashboard');
       },
       error: (error) => {

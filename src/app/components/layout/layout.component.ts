@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
-import { DashboardComponent } from '../dashboard/dashboard.component';
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { HttpResponse } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -13,13 +14,35 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
     SidebarComponent,
     FooterComponent,
     ToolbarComponent,
-    DashboardComponent,
     CommonModule,
-    RouterLink,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
+  public userName: string = '';
 
+  constructor(private authService: AuthService, private router: Router) {}
+  
+  ngOnInit(): void {
+    this.userData();
+  }
+
+  userData(){
+    const getUserData = {
+      iRequestID: 2036,
+    };
+
+    this.authService.dataUser(getUserData).subscribe({
+      next: (response: HttpResponse<any>) => {
+        console.log('user data:', response.body[0].sFirstName);
+        this.userName = response.body[0].sFirstName;
+        // localStorage.setItem('employeeApp', JSON.stringify(response.data));
+        // this.router.navigateByUrl('dashboard');
+      },
+      error: (error) => {
+        console.error('user data failed:', error);
+      },
+    });
+  }
 }

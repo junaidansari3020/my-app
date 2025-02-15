@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,7 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './toolbar.component.css',
 })
 export class ToolbarComponent {
-
+  @Input() user: string = "";
+  
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogout() {
