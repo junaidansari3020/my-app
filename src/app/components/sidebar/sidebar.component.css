@@ -1,0 +1,6 @@
+.sidebar {
+    width: 6.5rem;
+    min-height: calc(100vh - 4.5rem);
+    margin-top: 4.5rem;
+}
+
