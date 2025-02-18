@@ -1,15 +1,15 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css'] // Corrected property name
+  styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent {
   public newPassword: string = '';

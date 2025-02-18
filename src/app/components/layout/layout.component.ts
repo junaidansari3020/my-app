@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { FooterComponent } from '../footer/footer.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { HttpResponse } from '@angular/common/http';
@@ -12,7 +11,6 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     RouterOutlet,
     SidebarComponent,
-    FooterComponent,
     ToolbarComponent,
     CommonModule,
   ],
@@ -37,8 +35,6 @@ export class LayoutComponent implements OnInit {
       next: (response: HttpResponse<any>) => {
         console.log('user data:', response.body[0].sFirstName);
         this.userName = response.body[0].sFirstName;
-        // localStorage.setItem('employeeApp', JSON.stringify(response.data));
-        // this.router.navigateByUrl('dashboard');
       },
       error: (error) => {
         console.error('user data failed:', error);
