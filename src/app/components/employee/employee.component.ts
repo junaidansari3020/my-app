@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-employee',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatButtonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatButtonModule, RouterLink],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
 })
@@ -46,7 +46,4 @@ export class EmployeeComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  addData() {
-    // Add data logic here
-  }
 }

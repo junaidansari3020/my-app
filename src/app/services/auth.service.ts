@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private boauthUrl: string = 'https://car-service.in/luxuryfix/boauth';
   private bodataUrl: string = 'https://car-service.in/luxuryfix/bodata';
+  private dataUrl: string = 'https://car-service.in/luxuryfix/data';
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +18,6 @@ export class AuthService {
       withCredentials: true,
       observe: 'response' as const 
     };
-
     return this.http.post<any>(this.boauthUrl, data, options);
   }
 
@@ -27,7 +27,6 @@ export class AuthService {
       withCredentials: true,
       observe: 'response' as const 
     };
-
     return this.http.post<any>(this.boauthUrl, data, options);
   }
 
@@ -37,7 +36,15 @@ export class AuthService {
       withCredentials: true,
       observe: 'response' as const 
     };
-
     return this.http.post<any>(this.bodataUrl, data, options);
+  }
+
+  public dataEmployee(data: any, headers?: HttpHeaders): Observable<HttpResponse<any>> {
+    const options = {
+      headers: headers || new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' }),
+      withCredentials: true,
+      observe: 'response' as const 
+    };
+    return this.http.post<any>(this.dataUrl, data, options);
   }
 }

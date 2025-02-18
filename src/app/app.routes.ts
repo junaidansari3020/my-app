@@ -6,6 +6,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { LayoutComponent } from './components/layout/layout.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmployeeComponent } from './components/employee/employee.component';
+import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
         children: [
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
             { path: 'employee', component: EmployeeComponent, title: 'Employee' },
+            { path: 'add-employee', component: AddEmployeeComponent, title: 'Add Employee' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },

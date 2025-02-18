@@ -1,0 +1,11 @@
+.example-container mat-form-field + mat-form-field {
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+
+.example-button-row .mat-mdc-button-base {
+  margin: 25px 25px 8px 0;
+}
+
+
