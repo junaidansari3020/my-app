@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 
 
 @Component({
-  selector: 'app-add-employee',
+  selector: 'app-edit-employee',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -24,11 +24,11 @@ import { AuthService } from '../../services/auth.service';
     MatDividerModule,
     RouterLink,
   ],
-  templateUrl: './add-employee.component.html',
-  styleUrl: './add-employee.component.css',
+  templateUrl: './edit-employee.component.html',
+  styleUrl: './edit-employee.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddEmployeeComponent implements OnInit {
+export class EditEmployeeComponent {
   public firstName: string = '';
   public lastName: string = '';
   public email: string = '';
@@ -41,6 +41,22 @@ export class AddEmployeeComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.authService.dataUser({iRequestID: 20310, iEmpID: 1}).subscribe({
+      next: (response: HttpResponse<any>) => {
+        console.log('Address loaded successful:', response.body);
+        const empObj = response.body;
+        this.firstName = empObj.sFirstName;
+        this.lastName = empObj.sLastName;
+        this.email = empObj.sEmail;
+        this.mobileNo = empObj.sMobileNo;
+        this.address = empObj.iAddID;
+        this.role = empObj.iRoleID;
+      },
+      error: (error) => {
+        console.error('Address loading failed:', error);
+      },
+    });
+
     this.authService.dataUser({iRequestID: 2016}).subscribe({
       next: (response: HttpResponse<any>) => {
         // console.log('Address loaded successful:', response.body);
@@ -68,9 +84,10 @@ export class AddEmployeeComponent implements OnInit {
     this.value.set((event.target as HTMLInputElement).value);
   }
 
-  addEmployee() {
+  editEmployee(item: any) {
     const addEmployeeObj = {
-      iRequestID: 2032,
+      iRequestID: 2033,
+      iEmpID: 1,
       sFirstName: this.firstName,
       sLastName: this.lastName,
       sEmail: this.email,
@@ -90,4 +107,3 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 }
-

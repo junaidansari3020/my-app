@@ -7,6 +7,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmployeeComponent } from './components/employee/employee.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
             { path: 'employee', component: EmployeeComponent, title: 'Employee' },
             { path: 'add-employee', component: AddEmployeeComponent, title: 'Add Employee' },
+            { path: 'edit-employee', component: EditEmployeeComponent, title: 'Edit Employee' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },
