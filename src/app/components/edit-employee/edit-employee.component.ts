@@ -69,8 +69,8 @@ export class EditEmployeeComponent implements OnInit {
           lastName: empObj.sLastName,
           email: empObj.sEmail,
           mobileNo: empObj.sMobileNo,
-          address: empObj.iAddID,
-          role: empObj.iRoleID,
+          address: parseInt(empObj.iAddID),
+          role: parseInt(empObj.iRoleID),
         });
       },
       error: (error) => {
