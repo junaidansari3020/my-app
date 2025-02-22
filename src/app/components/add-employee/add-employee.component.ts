@@ -2,18 +2,19 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-employee',
   imports: [
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -29,21 +30,29 @@ import { AuthService } from '../../services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEmployeeComponent implements OnInit {
-  public firstName: string = '';
-  public lastName: string = '';
-  public email: string = '';
-  public mobileNo: string = '';
-  public address: string = '';
-  public role: string = '';
   public addressArray: any[] = [];
   public roleArray: any[] = [];
+  public addEmployeeForm: FormGroup;
+  protected readonly value = signal('');
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.addEmployeeForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      mobileNo: ['', [Validators.required, Validators.maxLength(10)]],
+      address: ['', Validators.required],
+      role: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    this.authService.dataUser({iRequestID: 2016}).subscribe({
+    this.authService.dataUser({ iRequestID: 2016 }).subscribe({
       next: (response: HttpResponse<any>) => {
-        // console.log('Address loaded successful:', response.body);
         this.addressArray = response.body;
       },
       error: (error) => {
@@ -51,9 +60,8 @@ export class AddEmployeeComponent implements OnInit {
       },
     });
 
-    this.authService.dataUser({iRequestID: 2094}).subscribe({
+    this.authService.dataUser({ iRequestID: 2094 }).subscribe({
       next: (response: HttpResponse<any>) => {
-        // console.log('Role loaded successful:', response.body);
         this.roleArray = response.body;
       },
       error: (error) => {
@@ -61,27 +69,29 @@ export class AddEmployeeComponent implements OnInit {
       },
     });
   }
-  
-  protected readonly value = signal('');
 
   protected onInput(event: Event) {
     this.value.set((event.target as HTMLInputElement).value);
   }
 
   addEmployee() {
+    if (this.addEmployeeForm.invalid) {
+      return;
+    }
+
     const addEmployeeObj = {
       iRequestID: 2032,
-      sFirstName: this.firstName,
-      sLastName: this.lastName,
-      sEmail: this.email,
-      sMobileNo: this.mobileNo,
-      iAddID: parseInt(this.address),
-      iRoleID: parseInt(this.role),
+      sFirstName: this.addEmployeeForm.value.firstName,
+      sLastName: this.addEmployeeForm.value.lastName,
+      sEmail: this.addEmployeeForm.value.email,
+      sMobileNo: this.addEmployeeForm.value.mobileNo,
+      iAddID: parseInt(this.addEmployeeForm.value.address),
+      iRoleID: parseInt(this.addEmployeeForm.value.role),
     };
 
     this.authService.dataUser(addEmployeeObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Employee added successful:', response.body);
+        console.log('Employee added successfully:', response.body);
         this.router.navigateByUrl('/employee');
       },
       error: (error) => {

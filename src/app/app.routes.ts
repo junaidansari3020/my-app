@@ -20,8 +20,8 @@ export const routes: Routes = [
         children: [
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
             { path: 'employee', component: EmployeeComponent, title: 'Employee' },
+            { path: 'employee/:id', component: EditEmployeeComponent, title: 'Edit Employee' },
             { path: 'add-employee', component: AddEmployeeComponent, title: 'Add Employee' },
-            { path: 'edit-employee', component: EditEmployeeComponent, title: 'Edit Employee' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },

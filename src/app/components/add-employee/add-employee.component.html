@@ -1,62 +1,76 @@
-
 <div class="container">
-    <h1 class="h3 mb-4 text-gray-800">Add Employee</h1>
+  <h1 class="h3 mb-4 text-gray-800">Add Employee</h1>
 
+  <form [formGroup]="addEmployeeForm" (ngSubmit)="addEmployee()">
     <div class="example-container">
-        <mat-form-field>
-            <mat-label>First Name</mat-label>
-            <input matInput [(ngModel)]="firstName" name="firstName" placeholder="Ex. John" />
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Ex. John" />
+        <mat-error *ngIf="addEmployeeForm.get('firstName')!.invalid && addEmployeeForm.get('firstName')!.touched">
+          First Name is required
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Last Name</mat-label>
-            <input matInput [(ngModel)]="lastName" name="lastName" placeholder="Ex. Doe" />
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Ex. Doe" />
+        <mat-error *ngIf="addEmployeeForm.get('lastName')!.invalid && addEmployeeForm.get('lastName')!.touched">
+          Last Name is required
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="example-container">
-        <mat-form-field hintLabel="Max 10 characters">
-            <mat-label>Mobile No.</mat-label>
-            <input matInput [(ngModel)]="mobileNo" name="mobileNo" #input maxlength="10" (input)="onInput($event)" />
-            <mat-icon matSuffix>phone</mat-icon>
-            <mat-hint align="end">{{value().length}}/10</mat-hint>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input matInput formControlName="email" placeholder="johndoe@example.com" required />
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="addEmployeeForm.get('email')!.invalid && addEmployeeForm.get('email')!.touched">
+          Please enter a valid email
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Enter your email</mat-label>
-            <input matInput [(ngModel)]="email" name="email" placeholder="johndoe@example.com" required />
-            <mat-icon matSuffix>email</mat-icon>
-        </mat-form-field>
+      <mat-form-field hintLabel="Max 10 characters">
+        <mat-label>Mobile No.</mat-label>
+        <input matInput formControlName="mobileNo" #input maxlength="10" (input)="onInput($event)" />
+        <mat-icon matSuffix>phone</mat-icon>
+        <mat-hint align="end">{{value().length}}/10</mat-hint>
+        <mat-error *ngIf="addEmployeeForm.get('mobileNo')!.invalid && addEmployeeForm.get('mobileNo')!.touched">
+          Mobile No. is required and should be max 10 characters
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="example-container">
-        <mat-form-field>
-            <mat-label>Address</mat-label>
-            <mat-select [(ngModel)]="address" name="address">
-                @for (item of addressArray; track $index) {
-                    <mat-option value="{{item.iAddID}}">{{item.sAddress}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <mat-select formControlName="address">
+          <mat-option *ngFor="let item of addressArray" [value]="item.iAddID">{{item.sAddress}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="addEmployeeForm.get('address')!.invalid && addEmployeeForm.get('address')!.touched">
+          Address is required
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Role</mat-label>
-            <mat-select [(ngModel)]="role" name="role">
-                @for (item of roleArray; track $index) {
-                    <mat-option value="{{item.iRoleID}}">{{item.sRoleName}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option *ngFor="let item of roleArray" [value]="item.iRoleID">{{item.sRoleName}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="addEmployeeForm.get('role')!.invalid && addEmployeeForm.get('role')!.touched">
+          Role is required
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <mat-divider></mat-divider>
     <section>
-        <div class="example-button-row">
-            <button mat-stroked-button routerLink="/employee">Cancel</button>
-            <button mat-flat-button (click)="addEmployee()">Save</button>
-            <!-- <button mat-flat-button disabled>Disabled</button> -->
-        </div>
+      <div class="example-button-row">
+        <button mat-stroked-button routerLink="/employee">Cancel</button>
+        <button mat-flat-button type="submit" [disabled]="addEmployeeForm.invalid">Save</button>
+      </div>
     </section>
+  </form>
 </div>
 
 

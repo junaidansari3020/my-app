@@ -51,6 +51,10 @@ export class EmployeeComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  editEmployee(item: any) {
+    this.router.navigate(['/employee', item.iEmpID]);
+  }
+
   deleteEmployee(item: any) {
     const deleteEmployeeObj = {
       iRequestID: 2034,

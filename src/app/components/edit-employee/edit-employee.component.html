@@ -1,66 +1,81 @@
-
 <div class="container">
-    <h1 class="h3 mb-4 text-gray-800">Edit Employee</h1>
+  <h1 class="h3 mb-4 text-gray-800">Edit Employee</h1>
 
+  <form [formGroup]="editEmployeeForm" (ngSubmit)="editEmployee()">
     <div class="example-container">
-        <mat-form-field>
-            <mat-label>First Name</mat-label>
-            <input matInput [(ngModel)]="firstName" name="firstName" placeholder="Ex. John" />
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Ex. John" />
+        <mat-error *ngIf="editEmployeeForm.get('firstName')!.invalid && editEmployeeForm.get('firstName')!.touched">
+          First Name is required
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Last Name</mat-label>
-            <input matInput [(ngModel)]="lastName" name="lastName" placeholder="Ex. Doe" />
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Ex. Doe" />
+        <mat-error *ngIf="editEmployeeForm.get('lastName')!.invalid && editEmployeeForm.get('lastName')!.touched">
+          Last Name is required
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="example-container">
-        <mat-form-field hintLabel="Max 10 characters">
-            <mat-label>Mobile No.</mat-label>
-            <input matInput [(ngModel)]="mobileNo" name="mobileNo" #input maxlength="10" (input)="onInput($event)" />
-            <mat-icon matSuffix>phone</mat-icon>
-            <mat-hint align="end">{{value().length}}/10</mat-hint>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input matInput formControlName="email" placeholder="johndoe@example.com" required />
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="editEmployeeForm.get('email')!.invalid && editEmployeeForm.get('email')!.touched">
+          Please enter a valid email
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Enter your email</mat-label>
-            <input matInput [(ngModel)]="email" name="email" placeholder="johndoe@example.com" required />
-            <mat-icon matSuffix>email</mat-icon>
-        </mat-form-field>
+      <mat-form-field hintLabel="Max 10 characters">
+        <mat-label>Mobile No.</mat-label>
+        <input matInput formControlName="mobileNo" #input maxlength="10" (input)="onInput($event)" />
+        <mat-icon matSuffix>phone</mat-icon>
+        <mat-hint align="end">{{value().length}}/10</mat-hint>
+        <mat-error *ngIf="editEmployeeForm.get('mobileNo')!.invalid && editEmployeeForm.get('mobileNo')!.touched">
+          Mobile No. is required and should be max 10 characters
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="example-container">
-        <mat-form-field>
-            <mat-label>Address</mat-label>
-            <mat-select [(ngModel)]="address" name="address">
-                @for (item of addressArray; track $index) {
-                    <mat-option value="{{item.iAddID}}">{{item.sAddress}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <mat-select formControlName="address" [(ngModel)]="selectedAddress">
+            <mat-option *ngFor="let item of addressArray; let i = index" [value]="item.iAddID">
+                {{ item.sAddress }}
+            </mat-option>  
+        </mat-select>
+        <mat-error *ngIf="editEmployeeForm.get('address')!.invalid && editEmployeeForm.get('address')!.touched">
+          Address is required
+        </mat-error>
+      </mat-form-field>
+      <p>You selected Address: {{selectedAddress}}</p>
 
-        <mat-form-field>
-            <mat-label>Role</mat-label>
-            <mat-select [(ngModel)]="role" name="role">
-                @for (item of roleArray; track $index) {
-                    <mat-option value="{{item.iRoleID}}">{{item.sRoleName}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role" [(ngModel)]="selectedRole">
+            <mat-option *ngFor="let item of roleArray; let i = index" [value]="item.iRoleID">
+                {{ item.sRoleName }}
+            </mat-option> 
+        </mat-select>
+        <mat-error *ngIf="editEmployeeForm.get('role')!.invalid && editEmployeeForm.get('role')!.touched">
+          Role is required
+        </mat-error>
+      </mat-form-field>
+      <p>You selected Role: {{selectedRole}}</p>
+
     </div>
 
     <mat-divider></mat-divider>
     <section>
-        <div class="example-button-row">
-            <button mat-stroked-button routerLink="/employee">Cancel</button>
-            <!-- <button mat-flat-button (click)="editEmployee()">Save</button> -->
-        </div>
+      <div class="example-button-row">
+        <button mat-stroked-button routerLink="/employee">Cancel</button>
+        <button mat-flat-button type="submit" [disabled]="editEmployeeForm.invalid">Save</button>
+      </div>
     </section>
+  </form>
 </div>
-
-
-
-
-
-
-

@@ -2,18 +2,19 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpResponse } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-employee',
   imports: [
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -28,38 +29,57 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './edit-employee.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditEmployeeComponent {
-  public firstName: string = '';
-  public lastName: string = '';
-  public email: string = '';
-  public mobileNo: string = '';
-  public address: string = '';
-  public role: string = '';
+export class EditEmployeeComponent implements OnInit {
   public addressArray: any[] = [];
   public roleArray: any[] = [];
+  public empId: any;
+  public editEmployeeForm: FormGroup;
+  protected readonly value = signal('');
 
-  constructor(private authService: AuthService, private router: Router) {}
+  selectedAddress = '';
+  selectedRole = '';
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.editEmployeeForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      mobileNo: ['', [Validators.required, Validators.maxLength(10)]],
+      address: ['', Validators.required],
+      role: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    this.authService.dataUser({iRequestID: 20310, iEmpID: 1}).subscribe({
+    this.route.paramMap.subscribe((params: ParamMap)=>{
+      let id = params.get('id');
+      this.empId = id;
+    });
+
+    this.authService.dataUser({ iRequestID: 20310, iEmpID: parseInt(this.empId) }).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Address loaded successful:', response.body);
-        const empObj = response.body;
-        this.firstName = empObj.sFirstName;
-        this.lastName = empObj.sLastName;
-        this.email = empObj.sEmail;
-        this.mobileNo = empObj.sMobileNo;
-        this.address = empObj.iAddID;
-        this.role = empObj.iRoleID;
+        const empObj = response.body[0];
+        this.editEmployeeForm.patchValue({
+          firstName: empObj.sFirstName,
+          lastName: empObj.sLastName,
+          email: empObj.sEmail,
+          mobileNo: empObj.sMobileNo,
+          address: empObj.iAddID,
+          role: empObj.iRoleID,
+        });
       },
       error: (error) => {
-        console.error('Address loading failed:', error);
+        console.error('Employee loading failed:', error);
       },
     });
 
-    this.authService.dataUser({iRequestID: 2016}).subscribe({
+    this.authService.dataUser({ iRequestID: 2016 }).subscribe({
       next: (response: HttpResponse<any>) => {
-        // console.log('Address loaded successful:', response.body);
         this.addressArray = response.body;
       },
       error: (error) => {
@@ -67,9 +87,8 @@ export class EditEmployeeComponent {
       },
     });
 
-    this.authService.dataUser({iRequestID: 2094}).subscribe({
+    this.authService.dataUser({ iRequestID: 2094 }).subscribe({
       next: (response: HttpResponse<any>) => {
-        // console.log('Role loaded successful:', response.body);
         this.roleArray = response.body;
       },
       error: (error) => {
@@ -77,33 +96,36 @@ export class EditEmployeeComponent {
       },
     });
   }
-  
-  protected readonly value = signal('');
 
   protected onInput(event: Event) {
     this.value.set((event.target as HTMLInputElement).value);
   }
 
-  editEmployee(item: any) {
+  editEmployee() {
+    if (this.editEmployeeForm.invalid) {
+      return;
+    }
+
     const addEmployeeObj = {
       iRequestID: 2033,
-      iEmpID: 1,
-      sFirstName: this.firstName,
-      sLastName: this.lastName,
-      sEmail: this.email,
-      sMobileNo: this.mobileNo,
-      iAddID: parseInt(this.address),
-      iRoleID: parseInt(this.role),
+      iEmpID: parseInt(this.empId),
+      sFirstName: this.editEmployeeForm.value.firstName,
+      sLastName: this.editEmployeeForm.value.lastName,
+      sEmail: this.editEmployeeForm.value.email,
+      sMobileNo: this.editEmployeeForm.value.mobileNo,
+      iAddID: parseInt(this.editEmployeeForm.value.address),
+      iRoleID: parseInt(this.editEmployeeForm.value.role),
     };
 
     this.authService.dataUser(addEmployeeObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Employee added successful:', response.body);
+        // console.log('Employee updated successfully:', response.body);
         this.router.navigateByUrl('/employee');
       },
       error: (error) => {
-        console.error('Employee adding failed:', error);
+        console.error('Employee updating failed:', error);
       },
     });
   }
+
 }
