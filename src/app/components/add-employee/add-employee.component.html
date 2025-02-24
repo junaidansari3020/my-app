@@ -45,7 +45,9 @@
       <mat-form-field>
         <mat-label>Address</mat-label>
         <mat-select formControlName="address">
-          <mat-option *ngFor="let item of addressArray" [value]="item.iAddID">{{item.sAddress}}</mat-option>
+          @for (item of addressArray; track $index) {
+            <mat-option [value]="item.iAddID">{{item.sAddress}}</mat-option>
+          }
         </mat-select>
         <mat-error *ngIf="addEmployeeForm.get('address')!.invalid && addEmployeeForm.get('address')!.touched">
           Address is required
@@ -55,7 +57,9 @@
       <mat-form-field>
         <mat-label>Role</mat-label>
         <mat-select formControlName="role">
-          <mat-option *ngFor="let item of roleArray" [value]="item.iRoleID">{{item.sRoleName}}</mat-option>
+          @for (item of roleArray; track $index) {
+            <mat-option [value]="item.iRoleID">{{item.sRoleName}}</mat-option>
+          }
         </mat-select>
         <mat-error *ngIf="addEmployeeForm.get('role')!.invalid && addEmployeeForm.get('role')!.touched">
           Role is required

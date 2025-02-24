@@ -33,7 +33,8 @@ export class LayoutComponent implements OnInit {
 
     this.authService.dataUser(getUserData).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('user data:', response.body[0].sFirstName);
+        console.log('user data:', response.body);
+        sessionStorage.setItem('statusCode', response.body.StatusCode);
         this.userName = response.body[0].sFirstName;
       },
       error: (error) => {

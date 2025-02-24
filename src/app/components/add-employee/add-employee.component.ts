@@ -1,8 +1,19 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-add-employee',
@@ -30,8 +42,8 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEmployeeComponent implements OnInit {
-  public addressArray: any[] = [];
-  public roleArray: any[] = [];
+  public addressArray: { iAddID: number; sAddress: string }[] = [];
+  public roleArray: { iRoleID: number; sRoleName: string }[] = [];
   public addEmployeeForm: FormGroup;
   protected readonly value = signal('');
 
@@ -51,21 +63,24 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.dataUser({ iRequestID: 2016 }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        this.addressArray = response.body;
-      },
-      error: (error) => {
-        console.error('Address loading failed:', error);
-      },
-    });
+    this.loadData();
+  }
 
-    this.authService.dataUser({ iRequestID: 2094 }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        this.roleArray = response.body;
+  private loadData() {
+    forkJoin({
+      addresses: this.authService.dataUser({ iRequestID: 2016 }),
+      roles: this.authService.dataUser({ iRequestID: 2094 }),
+    }).subscribe({
+      next: ({ addresses, roles }: any) => {
+        if (addresses.body) {
+          this.addressArray = addresses.body;
+        }
+        if (roles.body) {
+          this.roleArray = roles.body;
+        }
       },
       error: (error) => {
-        console.error('Role loading failed:', error);
+        console.error('Data loading failed:', error);
       },
     });
   }
@@ -91,7 +106,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.authService.dataUser(addEmployeeObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Employee added successfully:', response.body);
+        // console.log('Employee added successfully:', response.body);
         this.router.navigateByUrl('/employee');
       },
       error: (error) => {
@@ -100,4 +115,3 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 }
-

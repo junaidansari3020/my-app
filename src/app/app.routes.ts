@@ -8,6 +8,10 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmployeeComponent } from './components/employee/employee.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { authGuard } from './auth.guard';
+import { AddressComponent } from './components/address/address.component';
+import { AddAddressComponent } from './components/add-address/add-address.component';
+import { EditAddressComponent } from './components/edit-address/edit-address.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,11 +21,15 @@ export const routes: Routes = [
     { 
         path: '', 
         component: LayoutComponent,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
             { path: 'employee', component: EmployeeComponent, title: 'Employee' },
             { path: 'employee/:id', component: EditEmployeeComponent, title: 'Edit Employee' },
             { path: 'add-employee', component: AddEmployeeComponent, title: 'Add Employee' },
+            { path: 'address', component: AddressComponent, title: 'Address' },
+            { path: 'address/:id', component: EditAddressComponent, title: 'Address' },
+            { path: 'add-address', component: AddAddressComponent, title: 'Address' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },

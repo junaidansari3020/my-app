@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-sidebar',
   imports: [RouterLink],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
 
@@ -20,7 +20,7 @@ export class SidebarComponent {
       sidebar.classList.toggle('toggled');
       if (sidebar.classList.contains('toggled')) {
         const collapses = sidebar.querySelectorAll('.collapse');
-        collapses.forEach(collapse => {
+        collapses.forEach((collapse) => {
           this.renderer.removeClass(collapse, 'show');
         });
       }

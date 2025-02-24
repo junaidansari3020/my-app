@@ -1,0 +1,77 @@
+.container {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    margin-left: 0;
+}
+
+.form-container {
+    width: 100%;
+    /* margin: 30px auto; */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+h2 {
+    text-align: left;
+    /* font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px; */
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.half-width {
+    width: 48%;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+button {
+    width: 48%;
+}
+
+/* .Save_Button {
+    background-color: blue;
+    color:#ffffff;
+} */
+
+/* @media (max-width: 600px) {
+    .form-container {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .half-width {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+} */

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,13 +7,13 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-edit-employee',
+  standalone: true,
   imports: [
     CommonModule,
     MatFormFieldModule,
@@ -30,14 +31,11 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditEmployeeComponent implements OnInit {
-  public addressArray: any[] = [];
-  public roleArray: any[] = [];
-  public empId: any;
+  public addressArray: { iAddID: number; sAddress: string }[] = [];
+  public roleArray: { iRoleID: number; sRoleName: string }[] = [];
+  public empId: number | null = null;
   public editEmployeeForm: FormGroup;
   protected readonly value = signal('');
-
-  selectedAddress = '';
-  selectedRole = '';
 
   constructor(
     private authService: AuthService,
@@ -56,43 +54,44 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap)=>{
-      let id = params.get('id');
-      this.empId = id;
-    });
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      this.empId = id ? parseInt(id, 10) : null;
 
-    this.authService.dataUser({ iRequestID: 20310, iEmpID: parseInt(this.empId) }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        const empObj = response.body[0];
-        this.editEmployeeForm.patchValue({
-          firstName: empObj.sFirstName,
-          lastName: empObj.sLastName,
-          email: empObj.sEmail,
-          mobileNo: empObj.sMobileNo,
-          address: parseInt(empObj.iAddID),
-          role: parseInt(empObj.iRoleID),
-        });
+      if (this.empId) {
+        this.loadData(this.empId);
+      }
+    });
+  }
+
+  private loadData(empId: number) {
+    forkJoin({
+      employee: this.authService.dataUser({ iRequestID: 20310, iEmpID: empId }),
+      addresses: this.authService.dataUser({ iRequestID: 2016 }),
+      roles: this.authService.dataUser({ iRequestID: 2094 }),
+    }).subscribe({
+      next: ({ employee, addresses, roles }: any) => {
+        if (addresses.body) {
+          this.addressArray = addresses.body;
+        }
+        if (roles.body) {
+          this.roleArray = roles.body;
+        }
+
+        if (employee.body && employee.body.length > 0) {
+          const empObj = employee.body[0];
+          this.editEmployeeForm.patchValue({
+            firstName: empObj.sFirstName,
+            lastName: empObj.sLastName,
+            email: empObj.sEmail,
+            mobileNo: empObj.sMobileNo,
+            address: empObj.iAddID,
+            role: empObj.iRoleID,
+          });
+        }
       },
       error: (error) => {
-        console.error('Employee loading failed:', error);
-      },
-    });
-
-    this.authService.dataUser({ iRequestID: 2016 }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        this.addressArray = response.body;
-      },
-      error: (error) => {
-        console.error('Address loading failed:', error);
-      },
-    });
-
-    this.authService.dataUser({ iRequestID: 2094 }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        this.roleArray = response.body;
-      },
-      error: (error) => {
-        console.error('Role loading failed:', error);
+        console.error('Data loading failed:', error);
       },
     });
   }
@@ -106,20 +105,19 @@ export class EditEmployeeComponent implements OnInit {
       return;
     }
 
-    const addEmployeeObj = {
+    const updatedEmployee = {
       iRequestID: 2033,
-      iEmpID: parseInt(this.empId),
+      iEmpID: this.empId,
       sFirstName: this.editEmployeeForm.value.firstName,
       sLastName: this.editEmployeeForm.value.lastName,
       sEmail: this.editEmployeeForm.value.email,
       sMobileNo: this.editEmployeeForm.value.mobileNo,
-      iAddID: parseInt(this.editEmployeeForm.value.address),
-      iRoleID: parseInt(this.editEmployeeForm.value.role),
+      iAddID: parseInt(this.editEmployeeForm.value.address, 10),
+      iRoleID: parseInt(this.editEmployeeForm.value.role, 10),
     };
 
-    this.authService.dataUser(addEmployeeObj).subscribe({
-      next: (response: HttpResponse<any>) => {
-        // console.log('Employee updated successfully:', response.body);
+    this.authService.dataUser(updatedEmployee).subscribe({
+      next: () => {
         this.router.navigateByUrl('/employee');
       },
       error: (error) => {
@@ -127,5 +125,6 @@ export class EditEmployeeComponent implements OnInit {
       },
     });
   }
-
 }
+
+
