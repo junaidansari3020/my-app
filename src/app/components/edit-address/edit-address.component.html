@@ -1,1 +1,70 @@
-<p>edit-address works!</p>
+<div class="container">
+    <mat-card class="form-container">
+        <h2 class="h3 mb-4 text-gray-800">Add Address</h2>
+        <form [formGroup]="addAddressForm" (ngSubmit)="editAddress()">
+            <div class="row">
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Address Line 1</mat-label>
+                    <input matInput formControlName="line1">
+                    <mat-error *ngIf="addAddressForm.get('line1')!.invalid && addAddressForm.get('line1')!.touched">
+                        Address Line 1 is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Address Line 2</mat-label>
+                    <input matInput formControlName="line2">
+                </mat-form-field>
+            </div>
+
+            <!-- City & Postal Code (Same Row) -->
+            <div class="row">
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>City</mat-label>
+                    <mat-select formControlName="city">
+                        @for (item of citiesArray; track $index) {
+                        <mat-option [value]="item.iCityID">{{item.sCityName}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-error *ngIf="addAddressForm.get('city')!.invalid && addAddressForm.get('city')!.touched">
+                        City is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Postal Code</mat-label>
+                    <input matInput formControlName="postalCode">
+                    <mat-error
+                        *ngIf="addAddressForm.get('postalCode')!.invalid && addAddressForm.get('postalCode')!.touched">
+                        Postal Code is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Mobile No. & Tel No. (Same Row) -->
+            <div class="row">
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Mobile No.</mat-label>
+                    <input matInput formControlName="mobile">
+                    <mat-error *ngIf="addAddressForm.get('mobile')!.invalid && addAddressForm.get('mobile')!.touched">
+                        Mobile No. is required and should contain only numbers
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Tel No.</mat-label>
+                    <input matInput formControlName="tel">
+                    <mat-error *ngIf="addAddressForm.get('tel')!.invalid && addAddressForm.get('tel')!.touched">
+                        Tel No. should contain only numbers
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="button-group">
+                <button mat-raised-button type="button" routerLink="/address">Cancel</button>
+                <button mat-raised-button type="submit" [disabled]="addAddressForm.invalid">Save</button>
+            </div>
+
+        </form>
+    </mat-card>
+</div>

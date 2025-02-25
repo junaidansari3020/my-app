@@ -52,8 +52,8 @@ export class AddAddressComponent implements OnInit {
       line2: ['', Validators.required],
       city: ['', Validators.required],
       postalCode: ['', Validators.required],
-      mobile: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      tel: ['', Validators.pattern('^[0-9]*$')],
+      mobile: ['', Validators.required],
+      tel: ['', Validators.required],
     });
   }
 
@@ -88,8 +88,8 @@ export class AddAddressComponent implements OnInit {
       sAdd2: this.addAddressForm.value.line2,
       iCityID: this.addAddressForm.value.city,
       sPostalCode: this.addAddressForm.value.postalCode,
-      sTelNo1: parseInt(this.addAddressForm.value.mobile),
-      sTelNo2: parseInt(this.addAddressForm.value.tel),
+      sTelNo1: this.addAddressForm.value.mobile,
+      sTelNo2: this.addAddressForm.value.tel,
     };
 
     this.authService.dataUser(saveAddressObj).subscribe({

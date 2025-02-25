@@ -1,23 +1,25 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+
 import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 
 
 @Component({
   selector: 'app-alert',
-  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
+  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogContent],
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlertComponent {
-  readonly dialogRef = inject(MatDialogRef<AlertComponent>);
+  
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {msg: string}) { }
 
 }
 

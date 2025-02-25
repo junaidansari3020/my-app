@@ -28,8 +28,8 @@ export const routes: Routes = [
             { path: 'employee/:id', component: EditEmployeeComponent, title: 'Edit Employee' },
             { path: 'add-employee', component: AddEmployeeComponent, title: 'Add Employee' },
             { path: 'address', component: AddressComponent, title: 'Address' },
-            { path: 'address/:id', component: EditAddressComponent, title: 'Address' },
-            { path: 'add-address', component: AddAddressComponent, title: 'Address' },
+            { path: 'address/:id', component: EditAddressComponent, title: 'Edit Address' },
+            { path: 'add-address', component: AddAddressComponent, title: 'Add Address' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },

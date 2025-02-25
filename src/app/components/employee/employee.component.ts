@@ -61,7 +61,7 @@ export class EmployeeComponent implements OnInit {
       iEmpID: item.iEmpID,
     };
 
-    let dialogRef = this.dialog.open(AlertComponent);
+    let dialogRef = this.dialog.open(AlertComponent, {data: {msg: 'Are you sure you want to delete this employee?'}});
     
     dialogRef.afterClosed().subscribe(result => {
       if (result === "true") {

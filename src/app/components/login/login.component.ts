@@ -17,9 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.getAccessToken();
-  }
+  ngOnInit(): void {this.getAccessToken();}
 
   login() {
     const loginUserObj = {
@@ -30,8 +28,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginUser(loginUserObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Login successful:', response.body);
-        this.getAccessToken();
+        sessionStorage.setItem('statusCode', response.body.StatusCode);
+        if (response.body.StatusCode === '200') {
+          this.getAccessToken();
+        }
       },
       error: (error) => {
         console.error('Login failed:', error);
@@ -46,10 +46,13 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginUser(accessToken).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Access Token:', response.body);
-        this.router.navigateByUrl('dashboard');
+        sessionStorage.setItem('statusCode', response.body.StatusCode);
+        if (response.body.StatusCode === '200') {
+          this.router.navigateByUrl('dashboard');
+        }
       },
       error: (error) => {
+        sessionStorage.setItem('statusCode', error.error.StatusCode);
         console.error('Access Token failed:', error);
       }
     });

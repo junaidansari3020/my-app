@@ -72,7 +72,7 @@ export class AddressComponent implements OnInit {
   }
 
   editAddress(item: any) {
-    this.router.navigate(['/employee', item.iEmpID]);
+    this.router.navigate(['/address', item.iAddID]);
   }
 
   deleteAddress(item: any) {
@@ -81,7 +81,7 @@ export class AddressComponent implements OnInit {
       iAddID: item.iAddID,
     };
     
-    let dialogRef = this.dialog.open(AlertComponent);
+    let dialogRef = this.dialog.open(AlertComponent, {data: {msg: 'Are you sure you want to delete this address?'}});
     
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'true') {

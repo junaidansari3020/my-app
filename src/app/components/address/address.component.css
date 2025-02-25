@@ -1,23 +1,26 @@
 table {
-    width: 100%;
+  width: 100%;
 }
 
 .row {
-    display: flex;
-    align-items: center;
-    /* justify-content: space-between;  */
-    gap: 5px;
-    flex-wrap: wrap;
-    width: 100%;
-    padding-top: 10px;
-    padding-left: 8px;
-    /* Add slight left padding */
-    box-sizing: border-box;
-
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between;  */
+  gap: 5px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 8px;
+  /* Add slight left padding */
+  box-sizing: border-box;
 }
 
 .row button {
-    margin-top: -25px;
-    /* Moves button up */
-    /* margin-top: 10px; Moves button down */
+  margin-top: -25px;
+  /* Moves button up */
+  /* margin-top: 10px; Moves button down */
 }
+
+
+
+
