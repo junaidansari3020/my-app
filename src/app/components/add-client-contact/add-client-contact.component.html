@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Add Contact</h2>
+<mat-dialog-content>
+    <form #contactForm="ngForm">
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Contact Name</mat-label>
+                <input matInput [(ngModel)]="contact.name" name="name" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Mobile No.</mat-label>
+                <input matInput [(ngModel)]="contact.mobile" name="mobile" required>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Alternate No.</mat-label>
+                <input matInput [(ngModel)]="contact.alternate" name="alternate">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Email</mat-label>
+                <input matInput [(ngModel)]="contact.email" name="email" required>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="button-group">
+    <button mat-raised-button color="warn" class="cancel_button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" class="custom-save-button" (click)="onSave()">Save</button>
+</mat-dialog-actions>

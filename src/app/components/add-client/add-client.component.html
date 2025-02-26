@@ -1,0 +1,238 @@
+<div class="container">
+    <mat-card class="form-container">
+        <h2 class="h3 mb-4 text-gray-800">Add Client</h2>
+
+        <mat-tab-group [(selectedIndex)]="selectedTab" (selectedTabChange)="onTabChange($event)">
+
+            <!-- Tab 1: Client Information -->
+            <mat-tab label="General">
+                <form (submit)="saveClient()">
+                    <div class="row">
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Client Name</mat-label>
+                            <input matInput [(ngModel)]="client.name" name="name" required>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Client Type</mat-label>
+                            <mat-select [(ngModel)]="client.type" name="type" required>
+                                <mat-option *ngFor="let type of clientTypes" [value]="type">{{ type }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="row">
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Mobile No.</mat-label>
+                            <input matInput [(ngModel)]="client.mobile" name="mobile" required>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Alternative No.</mat-label>
+                            <input matInput [(ngModel)]="client.alternative" name="alternative">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="row">
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Email</mat-label>
+                            <input matInput [(ngModel)]="client.email" name="email" required>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="button-group">
+                        <button mat-raised-button color="warn" type="button" class="cancel_button"
+                            (click)="cancel()">Cancel</button>
+                        <button mat-raised-button color="primary" class="custom-save-button" type="submit">Save</button>
+                    </div>
+                </form>
+            </mat-tab>
+
+            <!-- Tab 2: Client Address -->
+            <mat-tab label="Address" [disabled]="!tabsUnlocked[1]">
+                <form (submit)="saveClient()">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Search Address</mat-label>
+                                <input matInput placeholder="Enter address">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <button mat-raised-button color="primary" (click)="openAddressDialog()">
+                                Add Address
+                            </button>
+                        </div>
+                    </div>
+
+                    <table mat-table [dataSource]="clientAddresses" class="mat-elevation-z8">
+                        <ng-container matColumnDef="line1">
+                            <th mat-header-cell *matHeaderCellDef> Add Line 1 </th>
+                            <td mat-cell *matCellDef="let element"> {{element.line1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="line2">
+                            <th mat-header-cell *matHeaderCellDef> Add Line 2 </th>
+                            <td mat-cell *matCellDef="let element"> {{element.line2}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="city">
+                            <th mat-header-cell *matHeaderCellDef> City </th>
+                            <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="postalCode">
+                            <th mat-header-cell *matHeaderCellDef> Postal Code </th>
+                            <td mat-cell *matCellDef="let element"> {{element.postalCode}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="editClientAddress(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="deleteClientAddress(element)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </form>
+            </mat-tab>
+
+            <!-- Tab 3: Client Contact -->
+            <mat-tab label="Contact" [disabled]="!tabsUnlocked[2]">
+                <form (submit)="saveClient()">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Search Contact</mat-label>
+                                <input matInput placeholder="Search Contact">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <button mat-raised-button color="primary" (click)="openContactDialog()">
+                                Add Contact
+                            </button>
+                        </div>
+                    </div>
+
+                    <table mat-table [dataSource]="clientContacts" class="mat-elevation-z8">
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Contact Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mobile">
+                            <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="alternate">
+                            <th mat-header-cell *matHeaderCellDef> Alternate No. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.alternate}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef> Email </th>
+                            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="editClientContact(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="deleteClientContact(element)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedContactColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedContactColumns;"></tr>
+                    </table>
+
+                </form>
+            </mat-tab>
+
+            <!-- Tab 4: Client Vehicle -->
+            <mat-tab label="Vehicle" [disabled]="!tabsUnlocked[3]">
+                <form (submit)="saveClient()">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Search Car</mat-label>
+                                <input matInput placeholder="Search Car">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <button mat-raised-button color="primary" (click)="openCarDialog()">
+                                Add Vehicle
+                            </button>
+                        </div>
+                    </div>
+
+                    <table mat-table [dataSource]="clientCars" class="mat-elevation-z8">
+                        <ng-container matColumnDef="brand">
+                            <th mat-header-cell *matHeaderCellDef> Brand </th>
+                            <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="model">
+                            <th mat-header-cell *matHeaderCellDef> Model </th>
+                            <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="variant">
+                            <th mat-header-cell *matHeaderCellDef> Variant </th>
+                            <td mat-cell *matCellDef="let element"> {{element.variant}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="registration">
+                            <th mat-header-cell *matHeaderCellDef> Registration </th>
+                            <td mat-cell *matCellDef="let element"> {{element.registration}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="chassisNo">
+                            <th mat-header-cell *matHeaderCellDef> Chassis No. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chassisNo}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="engineNo">
+                            <th mat-header-cell *matHeaderCellDef> Engine No. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.engineNo}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="color">
+                            <th mat-header-cell *matHeaderCellDef> Color </th>
+                            <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="editClientCar(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="deleteClientCar(element)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedCarColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedCarColumns;"></tr>
+                    </table>
+                </form>
+            </mat-tab>
+
+        </mat-tab-group>
+    </mat-card>
+</div>

@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Search Client</mat-label>
+                <input matInput placeholder="Enter client name">
+            </mat-form-field>
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <button mat-raised-button color="primary" (click)="navigateToAdd()">
+                Add Client
+            </button>
+        </div>
+    </div>
+
+    <table mat-table [dataSource]="clients" class="mat-elevation-z8">
+        <!-- Client Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Client Name </th>
+            <td mat-cell *matCellDef="let client"> {{ client.name }} </td>
+        </ng-container>
+
+        <!-- Client Type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Client Type </th>
+            <td mat-cell *matCellDef="let client"> {{ client.type }} </td>
+        </ng-container>
+
+        <!-- Mobile No Column -->
+        <ng-container matColumnDef="mobile">
+            <th mat-header-cell *matHeaderCellDef> Mobile No </th>
+            <td mat-cell *matCellDef="let client"> {{ client.mobile }} </td>
+        </ng-container>
+
+        <!-- Alternative No Column -->
+        <ng-container matColumnDef="alternative">
+            <th mat-header-cell *matHeaderCellDef> Alternative No. </th>
+            <td mat-cell *matCellDef="let client"> {{ client.alternative }} </td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let client"> {{ client.email }} </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let client">
+                <button mat-icon-button color="primary" (click)="editClient(client)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteClient(client)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Table Header & Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

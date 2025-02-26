@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>Add Vehicle</h2>
+<mat-dialog-content>
+    <form #vehicleForm="ngForm">
+        <div class="row">
+            <!-- Brand Select Box -->
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Brand</mat-label>
+                <mat-select [(ngModel)]="vehicle.brand" name="brand" required>
+                    <mat-option *ngFor="let brand of brands" [value]="brand">{{ brand }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Model Select Box -->
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Model</mat-label>
+                <mat-select [(ngModel)]="vehicle.model" name="model" required>
+                    <mat-option *ngFor="let model of models" [value]="model">{{ model }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Variant Select Box -->
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Variant</mat-label>
+                <mat-select [(ngModel)]="vehicle.variant" name="variant" required>
+                    <mat-option *ngFor="let variant of variants" [value]="variant">{{ variant }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Registration</mat-label>
+                <input matInput [(ngModel)]="vehicle.registration" name="registration" required>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Chassis No.</mat-label>
+                <input matInput [(ngModel)]="vehicle.chassisNo" name="chassisNo">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Engine No.</mat-label>
+                <input matInput [(ngModel)]="vehicle.engineNo" name="engineNo">
+            </mat-form-field>
+
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Color</mat-label>
+                <input matInput [(ngModel)]="vehicle.color" name="color">
+            </mat-form-field>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="button-group">
+    <button mat-raised-button color="warn" class="cancel_button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" class="custom-save-button" (click)="onSave()">Save</button>
+</mat-dialog-actions>

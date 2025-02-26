@@ -12,6 +12,9 @@ import { authGuard } from './auth.guard';
 import { AddressComponent } from './components/address/address.component';
 import { AddAddressComponent } from './components/add-address/add-address.component';
 import { EditAddressComponent } from './components/edit-address/edit-address.component';
+import { ClientComponent } from './components/client/client.component';
+import { AddClientComponent } from './components/add-client/add-client.component';
+import { EditClientComponent } from './components/edit-client/edit-client.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,6 +33,9 @@ export const routes: Routes = [
             { path: 'address', component: AddressComponent, title: 'Address' },
             { path: 'address/:id', component: EditAddressComponent, title: 'Edit Address' },
             { path: 'add-address', component: AddAddressComponent, title: 'Add Address' },
+            { path: 'client', component: ClientComponent, title: 'Client' },
+            { path: 'client/:id', component: EditClientComponent, title: 'Edit Client' },
+            { path: 'add-client', component: AddClientComponent, title: 'Add Client' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },
