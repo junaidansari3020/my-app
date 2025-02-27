@@ -221,5 +221,17 @@ export class AddClientComponent {
     this.router.navigate(['/client']);
   }
 
-  clientTypes: string[] = ['Individual', 'Company'];
+  clientTypes: any[] = [
+    {
+      id: 1,
+      clientType: 'Individual'
+
+    },
+    {
+      id: 2,
+      clientType: 'Company',
+
+    },
+  ];
+
 }

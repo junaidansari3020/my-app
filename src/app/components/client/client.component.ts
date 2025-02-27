@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
+import { HttpResponse } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-client',
@@ -19,25 +21,37 @@ import { MatCardModule } from '@angular/material/card';
     MatInputModule,
     MatFormFieldModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    RouterLink,
   ],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css'
 })
-export class ClientComponent {
+export class ClientComponent  implements OnInit {
+
   displayedColumns: string[] = ['name', 'type', 'mobile', 'alternative', 'email', 'action'];
-  clients = [
-    { name: 'John Doe', type: 'Corporate', mobile: '9876543210', alternative: '9876543201', email: 'john@example.com' },
-    { name: 'Jane Smith', type: 'Individual', mobile: '8765432109', alternative: '8765432198', email: 'jane@example.com' },
-    { name: 'Acme Inc.', type: 'Business', mobile: '7654321098', alternative: '7654321987', email: 'acme@example.com' },
-  ];
+  clients = new MatTableDataSource();
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  navigateToAdd() {
-    console.log('Navigating to add client form...');
-    this.router.navigate(['/add-client']);
-    // Add navigation logic here
+  ngOnInit(): void {
+    this.getAllClients();
+  }
+
+  getAllClients() {
+    const getAllClientsObj = {
+      iRequestID: 2126
+    };
+
+    this.authService.dataUser(getAllClientsObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // console.log('All clients loaded successfully:', response.body);
+        this.clients.data = response.body;
+      },
+      error: (error) => {
+        console.error('Clients loading failed:', error);
+      }
+    });
   }
 
   editClient(client: any) {
@@ -47,6 +61,12 @@ export class ClientComponent {
 
   deleteClient(client: any) {
     console.log('Deleting client:', client);
-    this.clients= this.clients.filter(c => c !== client);
+    // this.clients= this.clients.filter(c => c !== client);
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.clients.filter = filterValue.trim().toLowerCase();
+  }
+
 }

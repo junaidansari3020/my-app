@@ -16,7 +16,7 @@
                         <mat-form-field appearance="outline" class="half-width">
                             <mat-label>Client Type</mat-label>
                             <mat-select [(ngModel)]="client.type" name="type" required>
-                                <mat-option *ngFor="let type of clientTypes" [value]="type">{{ type }}</mat-option>
+                                <mat-option *ngFor="let item of clientTypes" [value]="item.id">{{ item.clientType }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
