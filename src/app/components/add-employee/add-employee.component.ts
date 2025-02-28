@@ -100,8 +100,8 @@ export class AddEmployeeComponent implements OnInit {
       sLastName: this.addEmployeeForm.value.lastName,
       sEmail: this.addEmployeeForm.value.email,
       sMobileNo: this.addEmployeeForm.value.mobileNo,
-      iAddID: parseInt(this.addEmployeeForm.value.address),
-      iRoleID: parseInt(this.addEmployeeForm.value.role),
+      iAddID: this.addEmployeeForm.value.address,
+      iRoleID: this.addEmployeeForm.value.role,
     };
 
     this.authService.dataUser(addEmployeeObj).subscribe({

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -10,6 +10,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { HttpResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { AlertComponent } from '../../dialog/alert/alert.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-client',
@@ -25,11 +27,19 @@ import { AuthService } from '../../services/auth.service';
     RouterLink,
   ],
   templateUrl: './client.component.html',
-  styleUrl: './client.component.css'
+  styleUrl: './client.component.css',
 })
-export class ClientComponent  implements OnInit {
-
-  displayedColumns: string[] = ['name', 'type', 'mobile', 'alternative', 'email', 'action'];
+export class ClientComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
+ 
+  displayedColumns: string[] = [
+    'name',
+    'type',
+    'mobile',
+    'alternative',
+    'email',
+    'action',
+  ];
   clients = new MatTableDataSource();
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -40,7 +50,7 @@ export class ClientComponent  implements OnInit {
 
   getAllClients() {
     const getAllClientsObj = {
-      iRequestID: 2126
+      iRequestID: 2126,
     };
 
     this.authService.dataUser(getAllClientsObj).subscribe({
@@ -50,7 +60,7 @@ export class ClientComponent  implements OnInit {
       },
       error: (error) => {
         console.error('Clients loading failed:', error);
-      }
+      },
     });
   }
 
@@ -60,13 +70,32 @@ export class ClientComponent  implements OnInit {
   }
 
   deleteClient(client: any) {
-    console.log('Deleting client:', client);
-    // this.clients= this.clients.filter(c => c !== client);
+    const deleteClientObj = {
+      iRequestID: 2127,
+      iCliID: client.iCliID,
+    };
+
+    let dialogRef = this.dialog.open(AlertComponent, {
+      data: { msg: 'Are you sure you want to delete this client?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'true') {
+        this.authService.dataUser(deleteClientObj).subscribe({
+          next: (response: HttpResponse<any>) => {
+            console.log('Client deleted successfully:', response.body);
+            this.getAllClients();
+          },
+          error: (error) => {
+            console.error('Client deleting failed:', error);
+          },
+        });
+      }
+    });
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.clients.filter = filterValue.trim().toLowerCase();
   }
-
 }

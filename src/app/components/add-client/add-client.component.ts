@@ -16,6 +16,8 @@ import { AddClientContactComponent } from '../add-client-contact/add-client-cont
 import { AddClientVehicleComponent } from '../add-client-vehicle/add-client-vehicle.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { HttpResponse } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-client',
@@ -41,6 +43,8 @@ export class AddClientComponent {
   tabsUnlocked = [true, false, false, false];
   client = { name: '', type: '', mobile: '', alternative: '', email: '' };
 
+  constructor(private router: Router, public dialog: MatDialog, private authService: AuthService) {}
+
   saveClient() {
     if (
       this.client.name &&
@@ -52,8 +56,30 @@ export class AddClientComponent {
       if (this.selectedTab === 0) {
         this.selectedTab = 1;
       }
+      this.addClient();
     }
   }
+
+  addClient() {
+    const addClientObj = {
+      iRequestID: 2121,
+      sCliName: this.client.name,
+      sEmailID: this.client.email,
+      sMobileNo: this.client.mobile,
+      sTelNo: this.client.alternative,
+      iCliType: this.client.type,
+    };
+
+    this.authService.dataUser(addClientObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // console.log('Alient added successfully:', response.body);
+      },
+      error: (error) => {
+        console.error('Client adding failed:', error);
+      },
+    });
+  }
+
   onTabChange(event: any) {
     this.selectedTab = event.index;
   }
@@ -65,6 +91,7 @@ export class AddClientComponent {
     'postalCode',
     'action',
   ];
+
   clientAddresses = [
     {
       line1: '123 Main Road',
@@ -98,6 +125,7 @@ export class AddClientComponent {
     'color',
     'action',
   ];
+
   clientCars = [
     {
       brand: 'Toyota',
@@ -119,7 +147,6 @@ export class AddClientComponent {
     },
   ];
 
-  constructor(private router: Router, public dialog: MatDialog) {}
 
   navigateToAdd() {
     this.router.navigate(['/add-client-address']);
@@ -224,14 +251,11 @@ export class AddClientComponent {
   clientTypes: any[] = [
     {
       id: 1,
-      clientType: 'Individual'
-
+      clientType: 'Individual',
     },
     {
       id: 2,
       clientType: 'Company',
-
     },
   ];
-
 }

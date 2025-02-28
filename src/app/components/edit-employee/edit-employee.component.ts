@@ -112,8 +112,8 @@ export class EditEmployeeComponent implements OnInit {
       sLastName: this.editEmployeeForm.value.lastName,
       sEmail: this.editEmployeeForm.value.email,
       sMobileNo: this.editEmployeeForm.value.mobileNo,
-      iAddID: parseInt(this.editEmployeeForm.value.address, 10),
-      iRoleID: parseInt(this.editEmployeeForm.value.role, 10),
+      iAddID: this.editEmployeeForm.value.address,
+      iRoleID: this.editEmployeeForm.value.role,
     };
 
     this.authService.dataUser(updatedEmployee).subscribe({
