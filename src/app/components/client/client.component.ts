@@ -65,8 +65,7 @@ export class ClientComponent implements OnInit {
   }
 
   editClient(client: any) {
-    console.log('Editing client:', client);
-    // Add edit functionality here
+    this.router.navigate(['/client', client.iCliID]);
   }
 
   deleteClient(client: any) {
@@ -83,7 +82,7 @@ export class ClientComponent implements OnInit {
       if (result === 'true') {
         this.authService.dataUser(deleteClientObj).subscribe({
           next: (response: HttpResponse<any>) => {
-            console.log('Client deleted successfully:', response.body);
+            // console.log('Client deleted successfully:', response.body);
             this.getAllClients();
           },
           error: (error) => {

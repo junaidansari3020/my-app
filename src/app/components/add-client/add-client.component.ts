@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { AddClientAddressComponent } from '../add-client-address/add-client-address.component';
@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { HttpResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { AlertComponent } from '../../dialog/alert/alert.component';
 
 @Component({
   selector: 'app-add-client',
@@ -40,10 +41,25 @@ import { AuthService } from '../../services/auth.service';
 })
 export class AddClientComponent {
   selectedTab = 0;
+  cliId = 0;
   tabsUnlocked = [true, false, false, false];
   client = { name: '', type: '', mobile: '', alternative: '', email: '' };
 
-  constructor(private router: Router, public dialog: MatDialog, private authService: AuthService) {}
+  displayedColumns: string[] = [
+    'line1',
+    'line2',
+    'city',
+    'postalCode',
+    'action',
+  ];
+
+  clientAddresses = new MatTableDataSource();
+
+  constructor(
+    private router: Router,
+    public dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   saveClient() {
     if (
@@ -72,7 +88,9 @@ export class AddClientComponent {
 
     this.authService.dataUser(addClientObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        // console.log('Alient added successfully:', response.body);
+        console.log('Client added successfully:', response.body);
+        this.cliId = response.body[0].iCliID;
+        this.getAllClientAddress();
       },
       error: (error) => {
         console.error('Client adding failed:', error);
@@ -80,39 +98,37 @@ export class AddClientComponent {
     });
   }
 
+  getAllClientAddress() {
+    const getAllClientAddressObj = {
+      iRequestID: 2161,
+      iCliID: this.cliId,
+    };
+
+    this.authService.dataUser(getAllClientAddressObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        console.log('All client address loaded successfully:', response);
+        this.clientAddresses.data = response.body;
+      },
+      error: (error) => {
+        console.error('Client address loading failed:', error);
+      },
+    });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.clientAddresses.filter = filterValue.trim().toLowerCase();
+  }
+
   onTabChange(event: any) {
     this.selectedTab = event.index;
   }
 
-  displayedColumns: string[] = [
-    'line1',
-    'line2',
-    'city',
-    'postalCode',
-    'action',
-  ];
-
-  clientAddresses = [
-    {
-      line1: '123 Main Road',
-      line2: 'Building',
-      city: 'Thane',
-      postalCode: '70001',
-    },
-    { line1: '406 Mtnl St', line2: '', city: 'Mumbai', postalCode: '479002' },
-  ];
-
-  displayedContactColumns: string[] = [
-    'name',
-    'mobile',
-    'alternate',
-    'email',
-    'action',
-  ];
+  displayedContactColumns: string[] = ['name', 'mobile', 'email', 'action'];
 
   clientContacts = [
-    { name: 'John ', mobile: '98743210', alternate: '167890', email: 'com' },
-    { name: 'Jane ', mobile: '432109', alternate: '11234455', email: 'com' },
+    { name: 'John ', mobile: '98743210', email: 'com' },
+    { name: 'Jane ', mobile: '432109', email: 'com' },
   ];
 
   displayedCarColumns: string[] = [
@@ -147,7 +163,6 @@ export class AddClientComponent {
     },
   ];
 
-
   navigateToAdd() {
     this.router.navigate(['/add-client-address']);
   }
@@ -158,8 +173,30 @@ export class AddClientComponent {
   }
 
   deleteClientAddress(element: any) {
-    console.log('Deleting:', element);
-    this.clientAddresses = this.clientAddresses.filter((a) => a !== element);
+    console.log(element);
+    const deleteClientAddressObj = {
+      iRequestID: 2165,
+      // iCliAddID: element.iEmpID,
+      // iCliID: element.iEmpID
+    };
+
+    let dialogRef = this.dialog.open(AlertComponent, {
+      data: { msg: 'Are you sure you want to delete this client address?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'true') {
+        this.authService.dataUser(deleteClientAddressObj).subscribe({
+          next: (response: HttpResponse<any>) => {
+            console.log('Client address deleted successfully:', response.body);
+            this.getAllClientAddress();
+          },
+          error: (error) => {
+            console.error('Client address deleting failed:', error);
+          },
+        });
+      }
+    });
   }
 
   editClientContact(element: any) {
@@ -185,23 +222,18 @@ export class AddClientComponent {
   openAddressDialog(): void {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
-    const dialogRef = this.dialog.open(AddClientAddressComponent, {
+    this.dialog.open(AddClientAddressComponent, {
       width: '90vw',
       maxWidth: '930px',
-      data: null,
+      data: { cliId: this.cliId },
       panelClass: 'custom-dialog-container',
       position: {
         top: `${viewportHeight * 0.2}px`,
         left: `${viewportWidth * 0.2}px`,
       },
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.clientAddresses.push(result);
-      }
-    });
   }
+
   openContactDialog(): void {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
