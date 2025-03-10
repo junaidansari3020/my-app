@@ -1,20 +1,20 @@
-<h2 mat-dialog-title>Add Vehicle</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
     <form #vehicleForm="ngForm">
         <div class="row">
             <!-- Brand Select Box -->
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Brand</mat-label>
-                <mat-select [(ngModel)]="vehicle.brand" name="brand" required>
-                    <mat-option *ngFor="let brand of brands" [value]="brand">{{ brand }}</mat-option>
+                <mat-select [(ngModel)]="vehicle.brand" name="brand" required (selectionChange)="onBrandChange($event)">
+                    <mat-option *ngFor="let brand of brandArray" [value]="brand.iBrandID">{{ brand.sBrandName }}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <!-- Model Select Box -->
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Model</mat-label>
-                <mat-select [(ngModel)]="vehicle.model" name="model" required>
-                    <mat-option *ngFor="let model of models" [value]="model">{{ model }}</mat-option>
+                <mat-select [(ngModel)]="vehicle.model" name="model" required (selectionChange)="onModelChange($event)">
+                    <mat-option *ngFor="let model of modelArray" [value]="model.iModelID">{{ model.sModelName }}</mat-option>
                 </mat-select>
             </mat-form-field>
 
@@ -22,7 +22,7 @@
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Variant</mat-label>
                 <mat-select [(ngModel)]="vehicle.variant" name="variant" required>
-                    <mat-option *ngFor="let variant of variants" [value]="variant">{{ variant }}</mat-option>
+                    <mat-option *ngFor="let variant of variantArray" [value]="variant.iVariantID">{{ variant.sVariant }}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>

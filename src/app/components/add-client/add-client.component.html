@@ -1,6 +1,6 @@
 <div class="container">
     <mat-card class="form-container">
-        <h2 class="h3 mb-4 text-gray-800">Add Client</h2>
+        <h2 class="h3 mb-4 text-gray-800">Edit Client</h2>
 
         <mat-tab-group [(selectedIndex)]="selectedTab" (selectedTabChange)="onTabChange($event)">
 
@@ -111,7 +111,7 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Search Contact</mat-label>
-                                <input matInput placeholder="Search Contact">
+                                <input matInput placeholder="Search Contact" (keyup)="applyFilter($event)">
                             </mat-form-field>
                         </div>
                         <div class="col-md-6">
@@ -124,17 +124,17 @@
                     <table mat-table [dataSource]="clientContacts" class="mat-elevation-z8">
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef> Contact Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sContactName}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="mobile">
                             <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sMobileNo}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="email">
                             <th mat-header-cell *matHeaderCellDef> Email </th>
-                            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sEmailID}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="action">
@@ -163,7 +163,7 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Search Car</mat-label>
-                                <input matInput placeholder="Search Car">
+                                <input matInput placeholder="Search Car" (keyup)="applyFilter($event)">
                             </mat-form-field>
                         </div>
                         <div class="col-md-6">
@@ -176,47 +176,47 @@
                     <table mat-table [dataSource]="clientCars" class="mat-elevation-z8">
                         <ng-container matColumnDef="brand">
                             <th mat-header-cell *matHeaderCellDef> Brand </th>
-                            <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sBrandName}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="model">
                             <th mat-header-cell *matHeaderCellDef> Model </th>
-                            <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sModel}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="variant">
                             <th mat-header-cell *matHeaderCellDef> Variant </th>
-                            <td mat-cell *matCellDef="let element"> {{element.variant}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sVariant}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="registration">
                             <th mat-header-cell *matHeaderCellDef> Registration </th>
-                            <td mat-cell *matCellDef="let element"> {{element.registration}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sRegNo}} </td>
                         </ng-container>
 
 
                         <ng-container matColumnDef="chassisNo">
                             <th mat-header-cell *matHeaderCellDef> Chassis No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.chassisNo}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sChassisNo}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="engineNo">
                             <th mat-header-cell *matHeaderCellDef> Engine No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.engineNo}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sEngineNo}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="color">
                             <th mat-header-cell *matHeaderCellDef> Color </th>
-                            <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.sColor}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="action">
                             <th mat-header-cell *matHeaderCellDef> Action </th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-icon-button color="primary" (click)="editClientCar(element)">
+                                <button mat-icon-button color="primary" (click)="editClientVehicle(element)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button color="warn" (click)="deleteClientCar(element)">
+                                <button mat-icon-button color="warn" (click)="deleteClientVehicle(element)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </td>

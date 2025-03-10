@@ -1,19 +1,30 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-edit-employee',
-  standalone: true,
   imports: [
     CommonModule,
     MatFormFieldModule,
@@ -31,16 +42,16 @@ import { forkJoin } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditEmployeeComponent implements OnInit {
-  public addressArray: { iAddID: number; sAddress: string }[] = [];
-  public roleArray: { iRoleID: number; sRoleName: string }[] = [];
+  public addressArray: any[] = [];
+  public roleArray: any[] = [];
   public empId: number | null = null;
   public editEmployeeForm: FormGroup;
   protected readonly value = signal('');
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
     this.editEmployeeForm = this.fb.group({
@@ -51,6 +62,10 @@ export class EditEmployeeComponent implements OnInit {
       address: ['', Validators.required],
       role: ['', Validators.required],
     });
+  }
+
+  protected onInput(event: Event) {
+    this.value.set((event.target as HTMLInputElement).value);
   }
 
   ngOnInit(): void {
@@ -66,18 +81,17 @@ export class EditEmployeeComponent implements OnInit {
 
   private loadData(empId: number) {
     forkJoin({
-      employee: this.authService.dataUser({ iRequestID: 20310, iEmpID: empId }),
-      addresses: this.authService.dataUser({ iRequestID: 2016 }),
-      roles: this.authService.dataUser({ iRequestID: 2094 }),
+      address: this.authService.dataUser({ iRequestID: 2016 }),
+      role: this.authService.dataUser({ iRequestID: 2094 }),
+      employee: this.authService.dataUser({ iRequestID: 20312, iEmpID: this.empId }),
     }).subscribe({
-      next: ({ employee, addresses, roles }: any) => {
-        if (addresses.body) {
-          this.addressArray = addresses.body;
+      next: ({ role, address, employee }: any) => {
+        if (address.body) {
+          this.addressArray = address.body;
         }
-        if (roles.body) {
-          this.roleArray = roles.body;
+        if (role.body) {
+          this.roleArray = role.body;
         }
-
         if (employee.body && employee.body.length > 0) {
           const empObj = employee.body[0];
           this.editEmployeeForm.patchValue({
@@ -96,16 +110,12 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 
-  protected onInput(event: Event) {
-    this.value.set((event.target as HTMLInputElement).value);
-  }
-
   editEmployee() {
     if (this.editEmployeeForm.invalid) {
       return;
     }
 
-    const updatedEmployee = {
+    const addEmployeeObj = {
       iRequestID: 2033,
       iEmpID: this.empId,
       sFirstName: this.editEmployeeForm.value.firstName,
@@ -116,8 +126,9 @@ export class EditEmployeeComponent implements OnInit {
       iRoleID: this.editEmployeeForm.value.role,
     };
 
-    this.authService.dataUser(updatedEmployee).subscribe({
-      next: () => {
+    this.authService.dataUser(addEmployeeObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // console.log('Employee updated successfully:', response.body);
         this.router.navigateByUrl('/employee');
       },
       error: (error) => {
@@ -126,5 +137,3 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 }
-
-

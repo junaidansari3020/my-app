@@ -19,6 +19,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LayoutComponent implements OnInit {
   public userName: string = '';
+  public menu: any[] = [];
 
   constructor(private authService: AuthService, private router: Router) {}
   
@@ -35,6 +36,7 @@ export class LayoutComponent implements OnInit {
       next: (response: HttpResponse<any>) => {
         console.log('user data:', response.body);
         this.userName = response.body[0].sFirstName;
+        this.menu = response.body[0].sRoleMenu;
       },
       error: (error) => {
         console.error('user data failed:', error);

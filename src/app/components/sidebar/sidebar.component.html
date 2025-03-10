@@ -10,106 +10,20 @@
     
     <hr class="sidebar-divider d-none d-md-block">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" routerLink="dashboard">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-            aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-building"></i>
-            <span>Company</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="employee">General</a>
-                <a class="collapse-item" routerLink="address">Address</a>
-                <a class="collapse-item" routerLink="employee">Employee</a>
-                <a class="collapse-item" routerLink="employee">Access Control</a>
+    <!-- Dynamic Menu Items -->
+    <ng-container *ngFor="let menu of sideMenu">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" [attr.data-target]="'#collapse' + menu.iMainMenuSeq" aria-expanded="true"
+                [attr.aria-controls]="'collapse' + menu.iMainMenuSeq">
+                <i [class]="menu.sIcon"></i>
+                <span>{{ menu.sTitle }}</span>
+            </a>
+            <div [id]="'collapse' + menu.iMainMenuSeq" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a *ngFor="let subMenu of menu.sCompany" class="collapse-item" [routerLink]="subMenu.sLink">{{ subMenu.sMenuTitle }}</a>
+                </div>
             </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Client</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="client">Client</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-            aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Product</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="employee">Category</a>
-                <a class="collapse-item" routerLink="employee">Product</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Service Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseService" aria-expanded="true"
-            aria-controls="collapseService">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Service</span>
-        </a>
-        <div id="collapseService" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="employee">Category</a>
-                <a class="collapse-item" routerLink="employee">Service</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Jobs Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseJobs" aria-expanded="true"
-            aria-controls="collapseJobs">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Jobs</span>
-        </a>
-        <div id="collapseJobs" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="employee">Current Jobs</a>
-                <a class="collapse-item" routerLink="employee">Invoice</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Reports Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReports" aria-expanded="true"
-            aria-controls="collapseReports">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Reports</span>
-        </a>
-        <div id="collapseReports" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" routerLink="employee">Job Reports</a>
-                <a class="collapse-item" routerLink="employee">Client Wise</a>
-                <a class="collapse-item" routerLink="employee">Brand Wise</a>
-            </div>
-        </div>
-    </li>
+        </li>
+    </ng-container>
 </ul>
 <!-- End of Sidebar -->

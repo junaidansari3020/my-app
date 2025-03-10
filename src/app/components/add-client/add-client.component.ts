@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -58,7 +58,8 @@ export class AddClientComponent {
   constructor(
     private router: Router,
     public dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   saveClient() {
@@ -125,11 +126,24 @@ export class AddClientComponent {
   }
 
   displayedContactColumns: string[] = ['name', 'mobile', 'email', 'action'];
+  clientContacts = new MatTableDataSource();
 
-  clientContacts = [
-    { name: 'John ', mobile: '98743210', email: 'com' },
-    { name: 'Jane ', mobile: '432109', email: 'com' },
-  ];
+  getAllClientContact() {
+    const getAllClientContactObj = {
+      iRequestID: 2174,
+      iCliID: this.cliId,
+    };
+
+    this.authService.dataUser(getAllClientContactObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // console.log('All client contact loaded successfully:', response);
+        this.clientContacts.data = response.body;
+      },
+      error: (error) => {
+        console.error('Client contact loading failed:', error);
+      },
+    });
+  }
 
   displayedCarColumns: string[] = [
     'brand',
@@ -142,42 +156,55 @@ export class AddClientComponent {
     'action',
   ];
 
-  clientCars = [
-    {
-      brand: 'Toyota',
-      model: 'Civic',
-      variant: 'New',
-      registration: '4',
-      chassisNo: '89',
-      engineNo: 'ENG',
-      color: 'White',
-    },
-    {
-      brand: 'Honda',
-      model: 'Civic',
-      variant: 'New',
-      registration: '5678',
-      chassisNo: '321',
-      engineNo: 'ENG',
-      color: 'Black',
-    },
-  ];
+  clientCars = new MatTableDataSource();
+
+  getAllClientVehicle() {
+    const getAllClientVehicleObj = {
+      iRequestID: 2134,
+      iCliID: this.cliId,
+    };
+
+    this.authService.dataUser(getAllClientVehicleObj).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // console.log('All client vehicle loaded successfully:', response);
+        this.clientCars.data = response.body;
+      },
+      error: (error) => {
+        console.error('Client vehicle loading failed:', error);
+      },
+    });
+  }
 
   navigateToAdd() {
     this.router.navigate(['/add-client-address']);
   }
 
   editClientAddress(element: any) {
-    console.log('Editing:', element);
-    // Implement edit logic here
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const dialogRef = this.dialog.open(AddClientAddressComponent, {
+      width: '90vw',
+      maxWidth: '930px',
+      data: { cliId: this.cliId, title: 'Edit Address', element },
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: `${viewportHeight * 0.2}px`,
+        left: `${viewportWidth * 0.2}px`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAllClientAddress();
+      }
+    });
   }
 
   deleteClientAddress(element: any) {
-    console.log(element);
     const deleteClientAddressObj = {
       iRequestID: 2165,
-      // iCliAddID: element.iEmpID,
-      // iCliID: element.iEmpID
+      iCliAddID: element.iCliAddID,
+      iCliID: element.iCliID
     };
 
     let dialogRef = this.dialog.open(AlertComponent, {
@@ -188,7 +215,7 @@ export class AddClientComponent {
       if (result === 'true') {
         this.authService.dataUser(deleteClientAddressObj).subscribe({
           next: (response: HttpResponse<any>) => {
-            console.log('Client address deleted successfully:', response.body);
+            // console.log('Client address deleted successfully:', response.body);
             this.getAllClientAddress();
           },
           error: (error) => {
@@ -200,47 +227,12 @@ export class AddClientComponent {
   }
 
   editClientContact(element: any) {
-    console.log('Editing Contact:', element);
-    // Implement edit logic here
-  }
-
-  deleteClientContact(element: any) {
-    console.log('Deleting Contact:', element);
-    this.clientContacts = this.clientContacts.filter((c) => c !== element);
-  }
-
-  editClientCar(element: any) {
-    console.log('Editing Car:', element);
-    // Implement edit logic here
-  }
-
-  deleteClientCar(element: any) {
-    console.log('Deleting Car:', element);
-    this.clientCars = this.clientCars.filter((car) => car !== element);
-  }
-
-  openAddressDialog(): void {
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-    this.dialog.open(AddClientAddressComponent, {
-      width: '90vw',
-      maxWidth: '930px',
-      data: { cliId: this.cliId },
-      panelClass: 'custom-dialog-container',
-      position: {
-        top: `${viewportHeight * 0.2}px`,
-        left: `${viewportWidth * 0.2}px`,
-      },
-    });
-  }
-
-  openContactDialog(): void {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const dialogCont = this.dialog.open(AddClientContactComponent, {
       width: '90vw',
       maxWidth: '930px',
-      data: null,
+      data: { cliId: this.cliId, title: 'Edit Contact', element },
       panelClass: 'custom-dialog-container',
       position: {
         top: `${viewportHeight * 0.2}px`,
@@ -250,7 +242,121 @@ export class AddClientComponent {
 
     dialogCont.afterClosed().subscribe((result) => {
       if (result) {
-        this.clientContacts.push(result);
+        this.getAllClientContact();
+      }
+    });
+  }
+
+  deleteClientContact(element: any) {
+    const deleteClientContactObj = {
+      iRequestID: 2173,
+      iContactID: element.iContactID,
+      iCliID: element.iCliID
+    };
+
+    let dialogRef = this.dialog.open(AlertComponent, {
+      data: { msg: 'Are you sure you want to delete this client contact?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'true') {
+        this.authService.dataUser(deleteClientContactObj).subscribe({
+          next: (response: HttpResponse<any>) => {
+            // console.log('Client contact deleted successfully:', response.body);
+            this.getAllClientContact();
+          },
+          error: (error) => {
+            console.error('Client contact deleting failed:', error);
+          },
+        });
+      }
+    });
+  }
+
+  editClientVehicle(element: any) {
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const dialogRef = this.dialog.open(AddClientVehicleComponent, {
+      width: '90vw',
+      maxWidth: '930px',
+      data: { title: 'Edit Vehicle', element },
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: `${viewportHeight * 0.2}px`,
+        left: `${viewportWidth * 0.2}px`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAllClientVehicle();
+      }
+    });
+  }
+
+  deleteClientVehicle(element: any) {
+    const deleteClientVehicleObj = {
+      iRequestID: 2133,
+      iCliVehID: element.iCliVehID
+    };
+
+    let dialogRef = this.dialog.open(AlertComponent, {
+      data: { msg: 'Are you sure you want to delete this client vehicle?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'true') {
+        this.authService.dataUser(deleteClientVehicleObj).subscribe({
+          next: (response: HttpResponse<any>) => {
+            console.log('Client vehicle deleted successfully:', response.body);
+            this.getAllClientVehicle();
+          },
+          error: (error) => {
+            console.error('Client vehicle deleting failed:', error);
+          },
+        });
+      }
+    });
+  }
+
+  openAddressDialog(): void {
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const dialogRef = this.dialog.open(AddClientAddressComponent, {
+      width: '90vw',
+      maxWidth: '930px',
+      data: { cliId: this.cliId, title: 'Add Address' },
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: `${viewportHeight * 0.2}px`,
+        left: `${viewportWidth * 0.2}px`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAllClientAddress();
+      }
+    });
+  }
+
+  openContactDialog(): void {
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const dialogCont = this.dialog.open(AddClientContactComponent, {
+      width: '90vw',
+      maxWidth: '930px',
+      data: { cliId: this.cliId, title: 'Add Contact' },
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: `${viewportHeight * 0.2}px`,
+        left: `${viewportWidth * 0.2}px`,
+      },
+    });
+
+    dialogCont.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAllClientContact();
       }
     });
   }
@@ -261,7 +367,7 @@ export class AddClientComponent {
     const dialogRef = this.dialog.open(AddClientVehicleComponent, {
       width: '90vw',
       maxWidth: '930px',
-      data: null,
+      data: { cliId: this.cliId, title: 'Add Vehicle' },
       panelClass: 'custom-dialog-container',
       position: {
         top: `${viewportHeight * 0.2}px`,
@@ -271,7 +377,7 @@ export class AddClientComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.clientCars.push(result);
+        this.getAllClientVehicle();
       }
     });
   }
