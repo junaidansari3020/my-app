@@ -6,27 +6,38 @@
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6 p-5 d-lg-block bg-login-image">
+                            <img src="img/brandLogo.jpg" class="img-fluid">
+                        </div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
                                 <form class="user">
-                                    <div class="form-group">
-                                        <input type="email" [(ngModel)]="email" name="email" class="form-control form-control-user"
-                                            id="exampleInputEmail" aria-describedby="emailHelp"
-                                            placeholder="Enter Email Address...">
-                                            <!-- <span *ngIf="!email.valid">Email is required</span> -->
+                                    <div class="example-container">
+                                        <mat-form-field>
+                                          <mat-label>Enter your email</mat-label>
+                                          <input matInput [(ngModel)]="email" name="email" placeholder="johndoe@example.com" required />
+                                          <mat-icon matSuffix>email</mat-icon>
+                                        </mat-form-field>
+
+                                        <mat-form-field>
+                                            <mat-label>Enter your password</mat-label>
+                                            <input matInput [(ngModel)]="password" name="password" [type]="hide() ? 'password' : 'text'" required />
+                                            <button
+                                              mat-icon-button
+                                              matSuffix
+                                              (click)="clickEvent($event)"
+                                              [attr.aria-label]="'Hide password'"
+                                              [attr.aria-pressed]="hide()"
+                                            >
+                                              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                            </button>
+                                        </mat-form-field> 
                                     </div>
-                                    <div class="form-group">
-                                        <input type="password" [(ngModel)]="password" name="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password">
-                                            <!-- <span *ngIf="!password.valid">Password is required</span> -->
-                                    </div>
-                                    <a (click)="login()" class="btn btn-primary btn-user btn-block">
-                                        Login
-                                    </a>
+
+                                    <button (click)="login()" mat-flat-button>Login</button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
@@ -40,6 +51,3 @@
         </div>
     </div>
 </div>
-
-
-

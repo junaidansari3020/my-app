@@ -1,6 +1,6 @@
 <div class="container">
     <mat-card class="form-container">
-        <h2 class="h3 mb-4 text-gray-800">Edit Client</h2>
+        <h2 class="h3 mb-4 text-gray-800">Add Client</h2>
 
         <mat-tab-group [(selectedIndex)]="selectedTab" (selectedTabChange)="onTabChange($event)">
 
@@ -106,7 +106,7 @@
 
             <!-- Tab 3: Client Contact -->
             <mat-tab label="Contact" [disabled]="!tabsUnlocked[2]">
-                <form (submit)="saveClient()">
+                <form>
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="w-100">

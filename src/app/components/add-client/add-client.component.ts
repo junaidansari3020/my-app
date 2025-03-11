@@ -41,7 +41,7 @@ import { AlertComponent } from '../../dialog/alert/alert.component';
 })
 export class AddClientComponent {
   selectedTab = 0;
-  cliId = 0;
+  cliId: any = 0;
   tabsUnlocked = [true, false, false, false];
   client = { name: '', type: '', mobile: '', alternative: '', email: '' };
 
@@ -91,7 +91,6 @@ export class AddClientComponent {
       next: (response: HttpResponse<any>) => {
         console.log('Client added successfully:', response.body);
         this.cliId = response.body[0].iCliID;
-        this.getAllClientAddress();
       },
       error: (error) => {
         console.error('Client adding failed:', error);

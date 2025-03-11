@@ -4,12 +4,25 @@ import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
   templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.css'
+  styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
   public email: string = '';
@@ -21,7 +34,7 @@ export class ForgotPasswordComponent {
       iRequestID: 1025,
       sEmail: this.email,
     };
-   
+
     this.authService.loginUser(forgotPasswordObj).subscribe({
       next: (response: HttpResponse<any>) => {
         console.log('Forgot Password successful:', response);
@@ -29,7 +42,7 @@ export class ForgotPasswordComponent {
       },
       error: (error) => {
         console.error('Forgot Password failed:', error);
-      }
+      },
     });
   }
 }
