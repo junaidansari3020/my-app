@@ -19,6 +19,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { HttpResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { AlertComponent } from '../../dialog/alert/alert.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-client',
@@ -59,7 +60,8 @@ export class EditClientComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -123,7 +125,8 @@ export class EditClientComponent implements OnInit {
 
     this.authService.dataUser(updateClientObj).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('Client updated successfully:', response.body);
+        // console.log('Client updated successfully:', response.body);
+        this.snackBar.open('Client updated successfully', 'Close', { duration: 2000 });
         this.getAllClientAddress();
         this.getAllClientContact();
         this.getAllClientVehicle();
@@ -231,6 +234,7 @@ export class EditClientComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client address updated successfully', 'Close', { duration: 2000 });
         this.getAllClientAddress();
       }
     });
@@ -252,6 +256,7 @@ export class EditClientComponent implements OnInit {
         this.authService.dataUser(deleteClientAddressObj).subscribe({
           next: (response: HttpResponse<any>) => {
             // console.log('Client address deleted successfully:', response.body);
+            this.snackBar.open('Client address deleted successfully', 'Close', { duration: 2000 });
             this.getAllClientAddress();
           },
           error: (error) => {
@@ -278,6 +283,7 @@ export class EditClientComponent implements OnInit {
 
     dialogCont.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client contact updated successfully', 'Close', { duration: 2000 });
         this.getAllClientContact();
       }
     });
@@ -299,6 +305,7 @@ export class EditClientComponent implements OnInit {
         this.authService.dataUser(deleteClientContactObj).subscribe({
           next: (response: HttpResponse<any>) => {
             // console.log('Client contact deleted successfully:', response.body);
+            this.snackBar.open('Client contact deleted successfully', 'Close', { duration: 2000 });
             this.getAllClientContact();
           },
           error: (error) => {
@@ -325,6 +332,7 @@ export class EditClientComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client vehicle updated successfully', 'Close', { duration: 2000 });
         this.getAllClientVehicle();
       }
     });
@@ -345,6 +353,7 @@ export class EditClientComponent implements OnInit {
         this.authService.dataUser(deleteClientVehicleObj).subscribe({
           next: (response: HttpResponse<any>) => {
             console.log('Client vehicle deleted successfully:', response.body);
+            this.snackBar.open('Client vehicle deleted successfully', 'Close', { duration: 2000 });
             this.getAllClientVehicle();
           },
           error: (error) => {
@@ -371,6 +380,7 @@ export class EditClientComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client address added successfully', 'Close', { duration: 2000 });
         this.getAllClientAddress();
       }
     });
@@ -392,12 +402,13 @@ export class EditClientComponent implements OnInit {
 
     dialogCont.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client contact added successfully', 'Close', { duration: 2000 });
         this.getAllClientContact();
       }
     });
   }
 
-  openCarDialog(): void {
+  openVehicleDialog(): void {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const dialogRef = this.dialog.open(AddClientVehicleComponent, {
@@ -413,6 +424,7 @@ export class EditClientComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.snackBar.open('Client vehicle added successfully', 'Close', { duration: 2000 });
         this.getAllClientVehicle();
       }
     });

@@ -158,7 +158,7 @@
 
             <!-- Tab 4: Client Vehicle -->
             <mat-tab label="Vehicle" [disabled]="!tabsUnlocked[3]">
-                <form (submit)="saveClient()">
+                <form>
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="w-100">
@@ -167,7 +167,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-md-6">
-                            <button mat-raised-button color="primary" (click)="openCarDialog()">
+                            <button mat-raised-button color="primary" (click)="openVehicleDialog()">
                                 Add Vehicle
                             </button>
                         </div>

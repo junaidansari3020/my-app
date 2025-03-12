@@ -12,6 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { AlertComponent } from '../../dialog/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-client',
@@ -42,7 +43,7 @@ export class ClientComponent implements OnInit {
   ];
   clients = new MatTableDataSource();
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.getAllClients();
@@ -83,6 +84,7 @@ export class ClientComponent implements OnInit {
         this.authService.dataUser(deleteClientObj).subscribe({
           next: (response: HttpResponse<any>) => {
             // console.log('Client deleted successfully:', response.body);
+            this.snackBar.open('Client deleted successfully', 'Close', { duration: 2000 });
             this.getAllClients();
           },
           error: (error) => {

@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';2
 
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../dialog/alert/alert.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee',
@@ -24,7 +25,7 @@ export class EmployeeComponent implements OnInit {
   displayedColumns: string[] = ['iEmpID', 'sFirstName', 'sLastName', 'sEmail', 'sMobileNo', 'sFullAddress', 'sRoleName', 'Action'];
   dataSource = new MatTableDataSource();
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.getAllEmployee();
@@ -67,7 +68,8 @@ export class EmployeeComponent implements OnInit {
       if (result === "true") {
         this.authService.dataUser(deleteEmployeeObj).subscribe({
           next: (response: HttpResponse<any>) => {
-            console.log('Employee deleted successfully:', response.body);
+            // console.log('Employee deleted successfully:', response.body);
+            this.snackBar.open('Employee deleted successfully', 'Close', { duration: 2000 });
             this.getAllEmployee();
           },
           error: (error) => {

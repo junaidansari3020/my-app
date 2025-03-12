@@ -88,11 +88,11 @@ export class AddClientAddressComponent implements OnInit {
   
       this.authService.dataUser(updateClientAddressObj).subscribe({
         next: (response: HttpResponse<any>) => {
-          // console.log('Client updated added successfully:', response.body);
+          // console.log('Client address updated successfully:', response.body);
           this.dialogRef.close(this.address);
         },
         error: (error) => {
-          console.error('Client updated adding failed:', error);
+          console.error('Client address updating failed:', error);
         },
       });
     } 

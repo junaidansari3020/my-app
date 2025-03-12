@@ -12,6 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { AlertComponent } from '../../dialog/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-address',
@@ -44,7 +45,7 @@ export class AddressComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.getAllAddress();
@@ -87,7 +88,8 @@ export class AddressComponent implements OnInit {
       if (result === 'true') {
         this.authService.dataUser(deleteAddressObj).subscribe({
           next: (response: HttpResponse<any>) => {
-            console.log('Address deleted successfully:', response.body);
+            // console.log('Address deleted successfully:', response.body);
+            this.snackBar.open('Address deleted successfully', 'Close', { duration: 2000 });
             this.getAllAddress();
           },
           error: (error) => {

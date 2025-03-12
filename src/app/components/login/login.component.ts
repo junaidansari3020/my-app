@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
   public email: string = '';
   public password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.getAccessToken();
@@ -59,17 +60,18 @@ export class LoginComponent implements OnInit {
       },
     });
   }
-
+  
   getAccessToken() {
     const accessToken = {
       iRequestID: 1023,
     };
-
+    
     this.authService.loginUser(accessToken).subscribe({
       next: (response: HttpResponse<any>) => {
         sessionStorage.setItem('statusCode', response.body.StatusCode);
         if (response.body.StatusCode === '200') {
           this.router.navigateByUrl('dashboard');
+          this.snackBar.open('Login successful', 'Close', { duration: 2000 });
         }
       },
       error: (error) => {

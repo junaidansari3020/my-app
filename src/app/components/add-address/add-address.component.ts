@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-address',
@@ -45,7 +46,8 @@ export class AddAddressComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.addAddressForm = this.fb.group({
       line1: ['', Validators.required],
@@ -94,8 +96,9 @@ export class AddAddressComponent implements OnInit {
 
     this.authService.dataUser(saveAddressObj).subscribe({
       next: (response) => {
-        console.log('Address saved successfully:', response);
+        // console.log('Address added successfully:', response);
         this.router.navigateByUrl('/address');
+        this.snackBar.open('Address added successfully', 'Close', { duration: 2000 });
       },
       error: (error) => {
         console.error('Address saving failed:', error);

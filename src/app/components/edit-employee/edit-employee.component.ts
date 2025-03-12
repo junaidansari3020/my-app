@@ -22,6 +22,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-employee',
@@ -51,6 +52,7 @@ export class EditEmployeeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -130,6 +132,7 @@ export class EditEmployeeComponent implements OnInit {
       next: (response: HttpResponse<any>) => {
         // console.log('Employee updated successfully:', response.body);
         this.router.navigateByUrl('/employee');
+        this.snackBar.open('Employee updated successfully', 'Close', { duration: 2000 });
       },
       error: (error) => {
         console.error('Employee updating failed:', error);

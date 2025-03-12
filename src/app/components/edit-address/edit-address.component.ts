@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-address',
@@ -49,7 +50,7 @@ export class EditAddressComponent {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    
+    private snackBar: MatSnackBar
   ) {
     this.addAddressForm = this.fb.group({
       line1: ['', Validators.required],
@@ -118,8 +119,9 @@ export class EditAddressComponent {
 
     this.authService.dataUser(editAddressObj).subscribe({
       next: (response) => {
-        console.log('Address updated successfully:', response);
+        // console.log('Address updated successfully:', response);
         this.router.navigateByUrl('/address');
+        this.snackBar.open('Address updated successfully', 'Close', { duration: 2000 });
       },
       error: (error) => {
         console.error('Address updating failed:', error);

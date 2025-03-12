@@ -22,6 +22,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-employee',
@@ -49,6 +50,7 @@ export class AddEmployeeComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -108,6 +110,7 @@ export class AddEmployeeComponent implements OnInit {
       next: (response: HttpResponse<any>) => {
         // console.log('Employee added successfully:', response.body);
         this.router.navigateByUrl('/employee');
+        this.snackBar.open('Employee added successfully', 'Close', { duration: 2000 });
       },
       error: (error) => {
         console.error('Employee adding failed:', error);
