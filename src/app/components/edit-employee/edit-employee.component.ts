@@ -59,7 +59,7 @@ export class EditEmployeeComponent implements OnInit {
     this.editEmployeeForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       mobileNo: ['', [Validators.required, Validators.maxLength(10)]],
       address: ['', Validators.required],
       role: ['', Validators.required],

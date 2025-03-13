@@ -14,17 +14,20 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
-                                <form class="user">
+                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                     <div class="example-container">
                                         <mat-form-field>
                                           <mat-label>Enter your email</mat-label>
-                                          <input matInput [(ngModel)]="email" name="email" placeholder="johndoe@example.com" required />
+                                          <input matInput formControlName="email" placeholder="johndoe@example.com" required />
                                           <mat-icon matSuffix>email</mat-icon>
+                                          <mat-error *ngIf="loginForm.get('email')!.invalid && loginForm.get('email')!.touched">
+                                            Please enter a valid email
+                                          </mat-error>
                                         </mat-form-field>
 
                                         <mat-form-field>
                                             <mat-label>Enter your password</mat-label>
-                                            <input matInput [(ngModel)]="password" name="password" [type]="hide() ? 'password' : 'text'" required />
+                                            <input matInput formControlName="password" [type]="hide() ? 'password' : 'text'" required />
                                             <button
                                               mat-icon-button
                                               matSuffix
@@ -32,12 +35,15 @@
                                               [attr.aria-label]="'Hide password'"
                                               [attr.aria-pressed]="hide()"
                                             >
-                                              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
                                             </button>
+                                            <mat-error *ngIf="loginForm.get('password')!.invalid && loginForm.get('password')!.touched">
+                                              Password should be min 8 characters
+                                            </mat-error>
                                         </mat-form-field> 
                                     </div>
 
-                                    <button (click)="login()" mat-flat-button>Login</button>
+                                    <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
@@ -53,4 +59,3 @@
 </div>
 
 
-  

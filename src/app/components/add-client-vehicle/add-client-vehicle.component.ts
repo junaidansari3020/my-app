@@ -129,9 +129,9 @@ export class AddClientVehicleComponent implements OnInit {
       const updateClientVehicleObj = {
         iRequestID: 2132,
         iCliVehID: this.data.element.iCliVehID,
-        iBrandID: this.vehicle.brand,
-        iModelID: this.vehicle.model,
-        iVariantID: this.vehicle.variant,
+        // iBrandID: this.vehicle.brand,
+        // iModelID: this.vehicle.model,
+        // iVariantID: this.vehicle.variant,
         sRegNo: this.vehicle.registration,
         sChassisNo: this.vehicle.chassisNo,
         sEngineNo: this.vehicle.engineNo,

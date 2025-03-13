@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,14 +25,26 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
-  public email: string = '';
+  forgotPasswordForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.forgotPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+    });
+  }
 
-  forgotPassword() {
+  onSubmit() {
+    if (this.forgotPasswordForm.invalid) {
+      return;
+    }
+
     const forgotPasswordObj = {
       iRequestID: 1025,
-      sEmail: this.email,
+      sEmail: this.forgotPasswordForm.value.email,
     };
 
     this.authService.loginUser(forgotPasswordObj).subscribe({
@@ -42,7 +54,8 @@ export class ForgotPasswordComponent {
       },
       error: (error) => {
         console.error('Forgot Password failed:', error);
-      },
+      }
     });
   }
+
 }

@@ -1,22 +1,23 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   imports: [
+    CommonModule,
     FormsModule,
     RouterLink,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
@@ -26,10 +27,19 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-  public email: string = '';
-  public password: string = '';
+  public loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
+    });
+  }
 
   ngOnInit(): void {
     this.getAccessToken();
@@ -40,12 +50,16 @@ export class LoginComponent implements OnInit {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
-  
-  login() {
+
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     const loginUserObj = {
       iRequestID: 1021,
-      sEmail: this.email,
-      sPassword: this.password,
+      sEmail: this.loginForm.value.email,
+      sPassword: this.loginForm.value.password,
     };
 
     this.authService.loginUser(loginUserObj).subscribe({
@@ -57,7 +71,7 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         console.error('Login failed:', error);
-      },
+      }
     });
   }
   
