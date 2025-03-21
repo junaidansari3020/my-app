@@ -1,0 +1,182 @@
+<div class="container mx-auto p-8">
+    <!-- Section to be captured -->
+    <div id="capture-section" class="bg-white p-8 rounded-lg shadow-lg">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="header">
+                            <h2>Luxury Fix Cars LLP</h2>
+                            <p>Address Line 1, Address Line 2, Riyadh, Postal Code, Saudi Arabia</p>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="img/brandLogo.jpg" width="170" height="100" class="img-fluid mx-auto d-block">
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Job Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>Name:</strong>
+                        <p>Abdul Razak Ahmed</p>
+                        <br>
+
+                        <strong>Address:</strong>
+                        <p>Flat No 1202, Oasis Apartment, Al Olaya, Street No 223, Riyadh 300002, Saudi Arabia</p>
+                        <br>
+                        
+                        <strong>Contact:</strong>
+                        <p>123456765</p>
+                    </td>
+                    <td>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Job No:</strong></td>
+                                    <td>123</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Job Start Date:</strong></td>
+                                    <td>05 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Expected Delivery Date:</strong></td>
+                                    <td>06 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Advisor Name:</strong></td>
+                                    <td>Sultan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vehicle In Date/Time:</strong></td>
+                                    <td>05 March 2025 / 10 AM</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Contact No:</strong></td>
+                                    <td>987654589 / 98762561</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>BMW Xi SportLine White</td>
+                    <td>Registration No: BNG 76788</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Engine No: 839939309</td>
+                    <td>Chassis No: 6797274982374982</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">Observations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td>Observation 1</td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <td>Observation 2</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td>Observation 3</td>
+                </tr>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td>Observation 4</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">Previous History</th>
+                </tr>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Job No</th>
+                    <th scope="col">Kms</th>
+                    <th scope="col">Advisor</th>
+                    <th scope="col">Observation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01 Dec 2024</td>
+                    <td>1233</td>
+                    <td>95000</td>
+                    <td>AdvC</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>12 Aug 2024</td>
+                    <td>678</td>
+                    <td>70000</td>
+                    <td>AdvB</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>25 Mar 2024</td>
+                    <td>82</td>
+                    <td>40000</td>
+                    <td>AdvA</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Customer Authorization</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Some Long text</td>
+                </tr>
+                <tr>
+                    <td>Some Long text</td>
+                </tr>
+                <tr>
+                    <td>Some Long text</td>
+                </tr>
+                <tr>
+                    <td>Signature and Date</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Button to capture -->
+    <div class="example-button-row text-center">
+        <button mat-flat-button (click)="generatePdf()">Generate PDF</button>
+        <button mat-flat-button (click)="generateImage()">Download Image</button>
+    </div>
+</div>

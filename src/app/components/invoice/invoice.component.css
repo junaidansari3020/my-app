@@ -1,0 +1,16 @@
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 25px 25px 25px 0;
+}
+
+#capture-section {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 30px;
+}
+.table {
+  color: black;
+}

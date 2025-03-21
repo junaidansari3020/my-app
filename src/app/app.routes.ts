@@ -15,6 +15,7 @@ import { EditAddressComponent } from './components/edit-address/edit-address.com
 import { ClientComponent } from './components/client/client.component';
 import { AddClientComponent } from './components/add-client/add-client.component';
 import { EditClientComponent } from './components/edit-client/edit-client.component';
+import { InvoiceComponent } from './components/invoice/invoice.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,6 +37,7 @@ export const routes: Routes = [
             { path: 'client', component: ClientComponent, title: 'Client' },
             { path: 'client/:id', component: EditClientComponent, title: 'Edit Client' },
             { path: 'add-client', component: AddClientComponent, title: 'Add Client' },
+            { path: 'invoice', component: InvoiceComponent, title: 'Invoice' },
         ]
     },
     { path: '**', component: PageNotFoundComponent, title: 'Page Not Found' },
